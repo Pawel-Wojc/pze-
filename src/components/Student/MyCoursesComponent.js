@@ -1,9 +1,7 @@
 import React, { Component } from 'react'
 
-export default class mycourses extends Component {
-  render() {
+export default function MyCourses () {
     return (
       <div>mycourses</div>
     )
-  }
 }

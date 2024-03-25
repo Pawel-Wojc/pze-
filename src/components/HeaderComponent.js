@@ -4,10 +4,10 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import Userdetails from './userdetails';
+import Userdetails from './UserDetailsComponent';
 import {Link} from 'react-router-dom';
 
-export default function AppHeader() {
+export default function Header() {
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);

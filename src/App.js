@@ -1,13 +1,14 @@
 import './App.css';
-import AppHeader from './components/header';
-import Courses from './components/courses';
-import MyCourses from './components/mycourses';
+import AppHeader from './components/HeaderComponent';
+import Courses from './components/Courses/CoursesComponent';
+import MyCourses from './components/Student/MyCoursesComponent';
 import { Routes, Route } from 'react-router-dom';
-import Login from './components/login';
+import Login from './components/LoginComponent';
+import Register from './components/RegisterComponent';
 import { useState } from 'react';
 function App() {
 
-  const [user, setUser] = useState("null");
+  const [user, setUser] = useState();
   return (
     <>
       {!user ? (

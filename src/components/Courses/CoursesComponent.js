@@ -11,13 +11,11 @@ for (let number = 1; number <= 5; number++) {
   );
 }
 
-export default class courses extends Component {
-  render() {
+export default function Courses () {
     return (
       <div>
         courses
         
         <Pagination>{items}</Pagination></div>
     )
-  }
 }
