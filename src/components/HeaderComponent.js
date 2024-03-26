@@ -19,11 +19,12 @@ export default function Header() {
                 <Container>
                     <Navbar.Brand >PZE++</Navbar.Brand>
                     <Nav variant="underline" className="me-auto">
-                        <Nav.Link as = {Link} to="/courses">Kursy</Nav.Link>
-                        <Nav.Link as = {Link} to="/mycourses">Moje Kursy</Nav.Link>
+                        <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
+                        <Nav.Link as = {Link} to="/mycourses">My courses</Nav.Link>
                         <Button variant="primary" onClick={handleShow}>
                             Jan Kowalski
                         </Button>
+                        <Nav.Link as = {Link} to="/mycourses">Logout</Nav.Link>
                         <Offcanvas show={show} onHide={handleClose} placement={'end'}>
                             <Offcanvas.Header closeButton>
                                 <Offcanvas.Title>Jan Kowalski</Offcanvas.Title>

@@ -8,9 +8,16 @@ import Register from './components/RegisterComponent';
 import { useState } from 'react';
 function App() {
 
-  const [user, setUser] = useState();
+  const [user, setUser] = useState({
+    Name: "Adam",
+    Surname: "Kowalski",
+    Email: "JanKowalski@wp.pl",
+    Role: "Teacher"
+  });
+
   return (
     <>
+      
       {!user ? (
         <Login />
       ) : (

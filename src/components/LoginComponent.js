@@ -23,7 +23,8 @@ export default function Login ()  {
             type ="password"
             id = "password"
             placeholder = "Enter password"
-            regex="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$"
+            regex="^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?]).{8,32}$"
+            warning="Password must be 8-32 characters, with at least one uppercase letter and one special character."
             /> 
           </Form.Group>
           
