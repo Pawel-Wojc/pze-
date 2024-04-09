@@ -6,13 +6,20 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Userdetails from './UserDetailsComponent';
 import {Link} from 'react-router-dom';
-
-export default function Header() {
+import AuthService from './Services/AuthService';
+export default function Header(props) {
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    let user = props.user;
+    
+    const logOut = () => {
+        AuthService.logout();
+      };
+      if (user){
+        console.log("user")
     return (
         <>
             <Navbar bg="dark" data-bs-theme="dark">
@@ -22,15 +29,15 @@ export default function Header() {
                         <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
                         <Nav.Link as = {Link} to="/mycourses">My courses</Nav.Link>
                         <Button variant="primary" onClick={handleShow}>
-                            Jan Kowalski
+                            {user.Name +" " + user.Surname}
                         </Button>
-                        <Nav.Link as = {Link} to="/mycourses">Logout</Nav.Link>
+                        <Nav.Link as = {Link} to="/login" onClick={logOut} >Logout</Nav.Link>
                         <Offcanvas show={show} onHide={handleClose} placement={'end'}>
                             <Offcanvas.Header closeButton>
-                                <Offcanvas.Title>Jan Kowalski</Offcanvas.Title>
+                                <Offcanvas.Title>{user.Name +" " + user.Surname}</Offcanvas.Title>
                             </Offcanvas.Header>
                             <Offcanvas.Body>
-                                <Userdetails></Userdetails>
+                                <Userdetails user={user}></Userdetails>
                             </Offcanvas.Body>
                         </Offcanvas>
                     </Nav>
@@ -38,4 +45,6 @@ export default function Header() {
             </Navbar>
         </>
     );
+}
+return (<></>)
 }

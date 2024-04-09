@@ -1,8 +1,6 @@
-import React, { Component } from 'react'
+import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
-import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
-import {useRef, useState, useEffect} from "react";
 import Input from './InputComponent'
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -26,7 +24,6 @@ export default function Register () {
     .then(res => {
       if(res.request.status == 200) {
         navigate('/login')
-
       }else {
         alert ("Error")
         console.log(res)
