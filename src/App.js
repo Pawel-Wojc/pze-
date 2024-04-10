@@ -2,7 +2,6 @@ import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import AppHeader from './components/HeaderComponent';
-
 import Courses from './components/Courses/CoursesComponent';
 import MyCourses from './components/Student/MyCoursesComponent';
 import Course from './components/Courses/CourseComponent';
@@ -11,6 +10,7 @@ import Register from './components/RegisterComponent';
 import Users from './components/HeadAdmin/UsersListComponent.js';
 import NotFound from './components/NotFoundComponent.js';
 import AuthService from './components/Services/AuthService.js';
+import ProtectedRoute from './components/ProtectedRoute.js';
 
 
 function App() {
@@ -31,15 +31,15 @@ function App() {
   )
     return (
       <>
-      {user ? <AppHeader user={user}/> : <></>}
+      <AppHeader user={user}/>
         <Routes>
-          <Route path="" element={< MyCourses/>} />
-          <Route path="/courses" element={<Courses user={user}/>} />
-          <Route path="/mycourses" element={<MyCourses user={user} />} />
-          <Route path="/course" element={<Course user={user} />} />
-          <Route path="/login" element={<Login user={user} />} />
-          <Route path="/register" element={<Register />} />
-          <Route path="/users" element={<Users user={user}/>} />
+          <Route path="" element={<ProtectedRoute>< Courses/></ProtectedRoute>} />
+          <Route path="/courses" element={<ProtectedRoute>< Courses/></ProtectedRoute>} />
+          <Route path="/mycourses" element={ <ProtectedRoute>< MyCourses/></ProtectedRoute>} />
+          <Route path="/course" element={ <ProtectedRoute>< MyCourses/></ProtectedRoute>} />
+          <Route path="/login" element={ <ProtectedRoute>< MyCourses/></ProtectedRoute>} />
+          <Route path="/register" element={ <ProtectedRoute>< Register/></ProtectedRoute>} />
+          <Route path="/users" element={<ProtectedRoute>< Users/></ProtectedRoute>} />
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
       </>

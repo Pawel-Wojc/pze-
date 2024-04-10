@@ -8,56 +8,30 @@ import AuthService from "./Services/AuthService";
 export default function Login(props) {
   const user_logged = props.user
   const navigate = useNavigate()
-  // const [user, setUser] = useState ({
-  //   email:'',
-  //   password:''   
-  // })
 
   const [user, setUser] = useState({
     mail: '',
     password: ''
   })
   
-
   const handleSumbit = (e) => {
     e.preventDefault();
     try {
       AuthService.login(user).then(
         () => {
           window.location.reload()
-          navigate("/");
+          navigate("/courses");
         },
         (error) => {
           console.log(error);
-        },
-       
+        },    
       );
     } catch (err) {
       console.log(err);
     }
   }
 
-
-  // const handleSumbit = (e) => {
-  //   e.preventDefault();
-  //   axios.post('http://localhost:8080/login', user)
-  //   .then(res => {
-  //     if(res.request.status == 200) {
-  //       localStorage.setItem("user", JSON.stringify(res.data));
-  //       console.log(res)
-  //       console.log(res.data)
-  //       navigate('/')
-  //     }else {
-  //       alert ("Error")
-  //       console.log(res.request.value)
-  //     }
-  //   })
-  //   .then(err => console.log(err));
-  // }
-
-
   return (
-    <> {user_logged ? navigate("/"):
     <div className="position-absolute top-50 start-50 translate-middle">
       <Form onSubmit={handleSumbit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -86,9 +60,5 @@ export default function Login(props) {
       </Form>
       <div>Need an account? <Link to="/register">Register</Link></div>
     </div>
-    }
-    </>
   )
-
-
 }

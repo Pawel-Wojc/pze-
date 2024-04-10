@@ -7,19 +7,23 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Userdetails from './UserDetailsComponent';
 import {Link} from 'react-router-dom';
 import AuthService from './Services/AuthService';
+
 export default function Header(props) {
 
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    let user = props.user;
-    
+    let user;
+    if (!user){
+        user = {Name:"Sda", Surname:"",Email:""}
+    } else {
+        user = props.user;
+    }
     const logOut = () => {
         AuthService.logout();
       };
-      if (user){
-        console.log("user")
+      
     return (
         <>
             <Navbar bg="dark" data-bs-theme="dark">
@@ -45,6 +49,4 @@ export default function Header(props) {
             </Navbar>
         </>
     );
-}
-return (<></>)
 }
