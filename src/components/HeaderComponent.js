@@ -9,22 +9,17 @@ import {Link} from 'react-router-dom';
 import AuthService from './Services/AuthService';
 
 export default function Header(props) {
-
+    var user = JSON.parse(sessionStorage.getItem('user'))
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
-    let user;
-    if (!user){
-        user = {Name:"Sda", Surname:"",Email:""}
-    } else {
-        user = props.user;
-    }
     const logOut = () => {
         AuthService.logout();
       };
       
     return (
+        user?
         <>
             <Navbar bg="dark" data-bs-theme="dark">
                 <Container>
@@ -47,6 +42,6 @@ export default function Header(props) {
                     </Nav>
                 </Container>
             </Navbar>
-        </>
+        </>:<></>
     );
 }

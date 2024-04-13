@@ -3,7 +3,7 @@ import React, { useState } from 'react'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import Form from 'react-bootstrap/Form';
 
-export default function Input ({label, type, id, placeholder, regex, warning}) {
+export default function Input ({label, type, id, placeholder, regex, warning }, onchange) {
 
     const [value, setValue] = useState('');
     const [isValid, setIsValid] = useState(true);
@@ -22,7 +22,7 @@ export default function Input ({label, type, id, placeholder, regex, warning}) {
     return (   
     <>
         <FloatingLabel>{label}</FloatingLabel>
-        <Form.Control type = {type} placeholder={placeholder} id= {id} onBlur={handleChange}/> 
+        <Form.Control type = {type} placeholder={placeholder} id= {id} onBlur={handleChange} onChange={onchange}/> 
         {!isValid && <div style={{ color: 'red' }}>{warning ? warning : "Input does not match the required format."}</div>}    
     </>
 

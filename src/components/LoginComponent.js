@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import Input from './InputComponent'
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import AuthService from "./Services/AuthService";
 
 export default function Login(props) {
   const user_logged = props.user
   const navigate = useNavigate()
-
+  let auth = sessionStorage.getItem("user_jwt")
   const [user, setUser] = useState({
     mail: '',
     password: ''
@@ -32,6 +32,7 @@ export default function Login(props) {
   }
 
   return (
+    !auth?<>
     <div className="position-absolute top-50 start-50 translate-middle">
       <Form onSubmit={handleSumbit}>
         <Form.Group className="mb-3" controlId="formBasicEmail">
@@ -60,5 +61,7 @@ export default function Login(props) {
       </Form>
       <div>Need an account? <Link to="/register">Register</Link></div>
     </div>
+    </>:
+    <Navigate to="/" ></Navigate>
   )
 }
