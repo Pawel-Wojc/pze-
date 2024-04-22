@@ -1,32 +1,45 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
+import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
-import Input from './InputComponent'
 import Alert from 'react-bootstrap/Alert';
 import { Link, useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import AuthService from './Services/AuthService';
-const NAME_REGEX = /^[A-z]{2,10}$/;
-const SURNAME_REGEX = /^[A-z]{2,10}$/;
-const USER_REGEX = /^[A-z][A-z0-9-_]{3,23}$/;
-const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{8,24}$/;
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 
 export default function Register() {
-  const navigate = useNavigate()
-  const [user, setUser] = useState({
-    name: '',
-    surname: '',
-    mail: '',
-    password: '',
-  })
+  const validationSchema = Yup.object().shape({
+    name: Yup.string()
+      .required('Name is required'),
+    surname: Yup.string()
+      .required('Surname is required'),
+    mail: Yup.string()
+      .required('Email is required')
+      .email('Email is not correct'),
+    password: Yup.string()
+      .required('Password is required')
+      .min(6, 'Password must be at least 6 characters'),
+    confirmPassword: Yup.string()
+      .required('Confirm Password is required')
+      .oneOf([Yup.ref('password')], 'Passwords must match')
+
+  });
+  const formOptions = { resolver: yupResolver(validationSchema) };
+  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { errors } = formState;
+
+
   const [showAllert, setShowAllert] = useState(false);
 
 
-  const handleSumbit = (e) => {
-    e.preventDefault();
-    console.log(user)
+  const navigate = useNavigate()
+  function onSubmit (data) {
+    delete data.confirmPassword
+    
+    console.log(data)
     try {
-      AuthService.register(user).then(
+      AuthService.register(register).then(
         () => {
           //window.location.reload()
           navigate("/login")
@@ -40,82 +53,94 @@ export default function Register() {
         console.log(err)
         setShowAllert(true);
       }
-    }
-    
+  }
+
+
 
   return (
     <>
       <div class="position-absolute top-50 start-50 translate-middle">
-      <Alert show={showAllert} variant="danger">
-        <Alert.Heading>Register</Alert.Heading>
-        <p>
-          Somethink went wrong
-        </p>
-        <hr />
-        <div className="d-flex justify-content-end">
-          <Button onClick={() => setShowAllert(false)} variant="outline-success">
-            Close me
-          </Button>
-        </div>
-      </Alert>
-        <Form onSubmit={handleSumbit}>
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+        <Alert show={showAllert} variant="danger">
+          <Alert.Heading>Register</Alert.Heading>
+          <p>
+            Somethink went wrong
+          </p>
+          <hr />
+          <div className="d-flex justify-content-end">
+            <Button onClick={() => setShowAllert(false)} variant="outline-success">
+              Close me
+            </Button>
+          </div>
+        </Alert>
+        <Form onSubmit={handleSubmit(onSubmit)}>
+          <Form.Group className="mb-3" controlId="name">
             <Form.Control
-              onChange={e => setUser({ ...user, name: e.target.value })}
+              {...register('name')}
               label="Name"
-              type="text"
-              id="name"
               placeholder="Enter name"
-              //regex="^[a-zA-z]+$.{3,10}"
-            />
-
-          </Form.Group>
-
-          <Form.Group className="mb-3" controlId="formBasicEmail">
-            <Form.Control
-              onChange={e => setUser({ ...user, surname: e.target.value })}
-              label="Surname"
               type="text"
-              id="surname"
+              name="name"
+              className={`form-control ${errors.name ? 'is-invalid' : ''}`}
+            />
+            <div className="invalid-feedback">{errors.name?.message}</div>
+          </Form.Group>
+
+          <Form.Group className="mb-3" controlId="surname">
+            <Form.Control
+              {...register('surname')}
+              label="Surname"
               placeholder="Enter surname"
-              //regex="^[a-zA-z]+$.{3,10}"
+              type="text"
+              name="surname"
+              className={`form-control ${errors.surname ? 'is-invalid' : ''}`}
             />
+            <div className="invalid-feedback">{errors.surname?.message}</div>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicEmail">
+          <Form.Group className="mb-3" controlId="email">
             <Form.Control
-              onChange={e => setUser({ ...user, mail: e.target.value })}
+              {...register('mail')}
               label="Email"
-              type="email"
-              id="email"
               placeholder="Enter email"
+              type="text"
+              name="email"
+              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
             />
+            <div className="invalid-feedback">{errors.email?.message}</div>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
-
+          <Form.Group className="mb-3" controlId="password">
             <Form.Control
-              onChange={e => setUser({ ...user, password: e.target.value })}
+              {...register('password')}
               label="Password"
-              type="password"
-              id="password"
               placeholder="Enter password"
-              //regex="^(?=.*[A-Z])(?=.*[!@#$%^&*()_+\-=\[\]{};':'\\|,.<>\/?]).{8,32}$"
-              warning="Password must be 8-32 characters, with at least one uppercase letter and one special character."
+              type="password"
+              name="password"
+              className={`form-control ${errors.password ? 'is-invalid' : ''}`}
             />
+            <div className="invalid-feedback">{errors.password?.message}</div>
           </Form.Group>
 
-          <Form.Group className="mb-3" controlId="formBasicPassword">
+          <Form.Group className="mb-3" controlId="confirmpassowrd">
             <Form.Control
+              {...register('confirmPassword')}
               label="Confirm Password"
+              placeholder="Confirm password"
               type="password"
-              id="passwordconfirm"
-              placeholder="Enter password"
-            /> </Form.Group>
+              name="confirmPassword"
+              className={`form-control ${errors.confirmPassword ? 'is-invalid' : ''}`}
+            />
+            <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
+          </Form.Group>
 
           <Button variant="primary" type="submit">
             Register
           </Button>
+
+          <Button variant="secondary" type="button" onClick={() => reset()}>
+            Reset
+          </Button>
+          {/* <button type="button" onClick={() => reset()} className="btn btn-secondary">Reset</button> */}
 
         </Form>
         <div>Already register? <Link to="/login">Login</Link></div>
