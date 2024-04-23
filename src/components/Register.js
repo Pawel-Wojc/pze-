@@ -11,15 +11,17 @@ import * as Yup from 'yup';
 export default function Register() {
   const validationSchema = Yup.object().shape({
     name: Yup.string()
-      .required('Name is required'),
+      .required('Name is required') 
+      .matches(/^[A-Za-z ]{3,}$/, 'Please enter valid name'),
     surname: Yup.string()
-      .required('Surname is required'),
+      .required('Surname is required')
+      .matches(/^[A-Za-z ]{3,}$/, 'Please enter valid surname'),
     mail: Yup.string()
       .required('Email is required')
-      .email('Email is not correct'),
+      .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Invalid email"),
     password: Yup.string()
       .required('Password is required')
-      .min(6, 'Password must be at least 6 characters'),
+      .min(8, 'Password must be at least 8 characters'),
     confirmPassword: Yup.string()
       .required('Confirm Password is required')
       .oneOf([Yup.ref('password')], 'Passwords must match')
@@ -29,9 +31,7 @@ export default function Register() {
   const { register, handleSubmit, reset, formState } = useForm(formOptions);
   const { errors } = formState;
 
-
   const [showAllert, setShowAllert] = useState(false);
-
 
   const navigate = useNavigate()
   function onSubmit (data) {
@@ -103,10 +103,10 @@ export default function Register() {
               label="Email"
               placeholder="Enter email"
               type="text"
-              name="email"
-              className={`form-control ${errors.email ? 'is-invalid' : ''}`}
+              name="mail"
+              className={`form-control ${errors.mail ? 'is-invalid' : ''}`}
             />
-            <div className="invalid-feedback">{errors.email?.message}</div>
+            <div className="invalid-feedback">{errors.mail?.message}</div>
           </Form.Group>
 
           <Form.Group className="mb-3" controlId="password">
@@ -140,8 +140,7 @@ export default function Register() {
           <Button variant="secondary" type="button" onClick={() => reset()}>
             Reset
           </Button>
-          {/* <button type="button" onClick={() => reset()} className="btn btn-secondary">Reset</button> */}
-
+          
         </Form>
         <div>Already register? <Link to="/login">Login</Link></div>
       </div>

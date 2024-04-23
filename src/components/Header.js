@@ -4,7 +4,7 @@ import Nav from 'react-bootstrap/Nav';
 import Navbar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
-import Userdetails from './UserDetailsComponent';
+import Userdetails from './UserDetails';
 import {Link} from 'react-router-dom';
 import AuthService from './Services/AuthService';
 
