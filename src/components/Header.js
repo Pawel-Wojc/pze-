@@ -26,7 +26,7 @@ export default function Header(props) {
                     <Navbar.Brand >PZE++</Navbar.Brand>
                     <Nav variant="underline" className="me-auto">
                         <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
-                        <Nav.Link as = {Link} to="/mycourses">My courses</Nav.Link>
+                        <Nav.Link as = {Link} to="/usercourses">My courses</Nav.Link>
                         <Button variant="primary" onClick={handleShow}>
                             {user.Name +" " + user.Surname}
                         </Button>

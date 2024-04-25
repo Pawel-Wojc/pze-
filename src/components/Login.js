@@ -22,7 +22,7 @@ export default function Login(props) {
       .matches(/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i, "Invalid email"),
     password: Yup.string()
       .required('Password is required')
-      .min(8, 'Invalid password'),
+      .min(5, 'Invalid password'),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { register, handleSubmit, reset, formState } = useForm(formOptions);
@@ -34,8 +34,7 @@ export default function Login(props) {
     try {
       AuthService.login(data).then(
         () => {
-          window.location.reload()
-          navigate("/courses");
+          console.log(auth)
         },
         (error) => {
           console.log(error);

@@ -16,17 +16,20 @@ const login = (user ) => {
       return axios.request(config)
         .then((response) => {
           if(response.request.status == 200) { 
-          console.log("user login ok!");
-          sessionStorage.setItem("user_jwt", response.data)
-          getCurrentUser()
-          var user = JSON.parse(sessionStorage.getItem('user'))
-          if (user.Role = 4 ){ //user is locked
-            sessionStorage.removeItem("user_jwt")
-          }else {
-            sessionStorage.setItem("user_jwt", response.data)
-          }
+          console.log("user login ok!" );
+          console.log(response.data );
           
+          sessionStorage.setItem("user_jwt", response.data)
           window.location.reload()
+          //getCurrentUser()
+          //var user = JSON.parse(sessionStorage.getItem('user'))
+          //if (user.Role = 4 ){ //user is locked
+            //sessionStorage.removeItem("user_jwt")
+          //}else {
+           // sessionStorage.setItem("user_jwt", response.data)
+          //}
+          
+          
           }
         }      
     )
