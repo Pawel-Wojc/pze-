@@ -1,16 +1,22 @@
 import './App.css';
 import { Routes, Route } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import AllCourses from './components/Courses/AllCourses.js';
+import AllCourses from './components/Student/AllCourses.js';
 import UserCourses from './components/Student/UserCourses.js';
-import UserCourse from './components/Courses/UserCourse.js';
+import UserCourse from './components/Student/UserCourse.js';
 import Login from './components/Login.js';
 import Register from './components/Register.js';
 import UsersList from './components/HeadAdmin/UsersListComponent.js';
 import NotFound from './components/NotFound.js';
 import AuthService from './components/Services/AuthService.js';
 import PrivateRoutes from './components/Utils/PrivateRoutes.js'
-import Task from './components/Courses/Task.js';
+import Task from './components/Student/Task.js';
+import TeacherCourseSettings from './components/Teacher/TeacherCourseSettings.js'
+import TeacherCoursesList from './components/Teacher/TeacherCoursesList.js'
+import TeacherCourse from './components/Teacher/TeacherCourse.js'
+
+import TeacherCourseTask from './components/Teacher/TeacherCourseTask.js'
+import TeacherCourseTasksSettings from './components/Teacher/TeacherCourseTasksSettings.js'
 
 function App() {
   
@@ -35,6 +41,7 @@ function App() {
         <Routes>
           <Route element={<PrivateRoutes/>}>      
             <Route path="" element={< AllCourses/>} />
+            {/* user routs */}
             <Route path="/courses" element={< AllCourses/>} />
             <Route path="/usercourses" element={ < UserCourses/>} />
             <Route path="/usercourse" element={ <NotFound />} />
@@ -42,6 +49,17 @@ function App() {
             <Route path="/usertask" element={<NotFound />} />
             <Route path="/usertask/:task_id" element={< Task/>} />
             <Route path="/userslist" element={< UsersList/>} />
+            {/* teacher routs */}
+            <Route path="/teacher/courseslist" element={< TeacherCoursesList/>} />  {/* lista kursow */}
+            <Route path="/teacher/course/:course_id" element={< TeacherCourse/>} /> {/* podglad konkretnego kursu */}
+            <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings/>} /> {/* edycja konkretnego kursu*/}
+
+            {/* <Route path="/teacher/course/tasks" element={< TeacherCourseTasks/>} /> */}
+            <Route path="/teacher/course/tasks/:task_id" element={< TeacherCourseTask/>} />  {/* podglad zadania*/}
+            <Route path="/teacher/course/tasks/settings/:task_id" element={< TeacherCourseTasksSettings/>} /> {/* edycja zadania*/}
+
+
+            {/* admin routs */}
           </Route>
           <Route path="/login" element={ <Login/>} />
           <Route path="/register" element={ < Register/>} />

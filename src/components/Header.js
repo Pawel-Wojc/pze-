@@ -10,6 +10,7 @@ import AuthService from './Services/AuthService';
 
 export default function Header(props) {
     var user = JSON.parse(sessionStorage.getItem('user'))
+    console.log("header + "+user + sessionStorage.getItem('user'))
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -25,15 +26,23 @@ export default function Header(props) {
                 <Container>
                     <Navbar.Brand >PZE++</Navbar.Brand>
                     <Nav variant="underline" className="me-auto">
-                        <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
-                        <Nav.Link as = {Link} to="/usercourses">My courses</Nav.Link>
+                        {(user.role == 0) ? 
+                        <>
+                            <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
+                            <Nav.Link as = {Link} to="/usercourses">My courses</Nav.Link>
+                        </> : <></> }
+                        {(user.role == 1) ? 
+                        <>
+                            <Nav.Link as = {Link} to="/teacher/courseslist">Courses</Nav.Link>
+                        </> : <></> }
+                        
                         <Button variant="primary" onClick={handleShow}>
-                            {user.Name +" " + user.Surname}
+                            {user.name +" " + user.surname}
                         </Button>
                         <Nav.Link as = {Link} to="/login" onClick={logOut} >Logout</Nav.Link>
                         <Offcanvas show={show} onHide={handleClose} placement={'end'}>
                             <Offcanvas.Header closeButton>
-                                <Offcanvas.Title>{user.Name +" " + user.Surname}</Offcanvas.Title>
+                                <Offcanvas.Title>{user.name +" " + user.surname}</Offcanvas.Title>
                             </Offcanvas.Header>
                             <Offcanvas.Body>
                                 <Userdetails user={user}></Userdetails>

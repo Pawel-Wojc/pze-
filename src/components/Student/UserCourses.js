@@ -1,6 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Course from '../Courses/UserCourse'
+import Course from './UserCourse'
 import { useState,useEffect } from 'react'
 import axios from 'axios'
 
