@@ -10,7 +10,6 @@ import AuthService from './Services/AuthService';
 
 export default function Header(props) {
     var user = JSON.parse(sessionStorage.getItem('user'))
-    console.log("header + "+user + sessionStorage.getItem('user'))
     const [show, setShow] = useState(false);
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
@@ -26,12 +25,16 @@ export default function Header(props) {
                 <Container>
                     <Navbar.Brand >PZE++</Navbar.Brand>
                     <Nav variant="underline" className="me-auto">
-                        {(user.role == 0) ? 
+                        {(user.role == "student") ? 
                         <>
                             <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
                             <Nav.Link as = {Link} to="/usercourses">My courses</Nav.Link>
                         </> : <></> }
-                        {(user.role == 1) ? 
+                        {(user.role == "tutor") ? 
+                        <>
+                            <Nav.Link as = {Link} to="/teacher/courseslist">Courses</Nav.Link>
+                        </> : <></> }
+                        {(user.role == "admin") ? 
                         <>
                             <Nav.Link as = {Link} to="/teacher/courseslist">Courses</Nav.Link>
                         </> : <></> }

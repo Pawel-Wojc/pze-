@@ -16,7 +16,6 @@ export default function Input ({label, type, id, placeholder, regex, warning }, 
         if (regex) {
             const pattern = new RegExp(regex);
             setIsValid(pattern.test(newValue));
-            console.log("ok")
         }
     };
     return (   

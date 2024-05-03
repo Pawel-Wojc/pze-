@@ -15,7 +15,6 @@ export default function MyCourses(props) {
 
   const getData = async () => {
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/user/courses", config).then(res => {
-      console.log(res.data)
       return res;
     })
       .catch(err => {
@@ -32,8 +31,7 @@ export default function MyCourses(props) {
     <div class="row justify-content-md-center" style={{}}>
       {userCourses.map(course => (
         <div class="card" style={{ width: '40rem', margin: '10px' }}>
-          <div class="card-body">
-            
+          <div class="card-body">          
             <Link to={`/usercourse/${course.id}`} class="card-title" >
             {course.title}
           </Link>
@@ -47,13 +45,8 @@ export default function MyCourses(props) {
 
           </div>
         </div>
-
-
-
-
       ))}
     </div>
-
   </>
   )
 }

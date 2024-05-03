@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import axios from "axios"
 import { ListGroup } from 'react-bootstrap';
+import AuthService from '../Services/AuthService';
 
-export default function Courses(props) {
+export default function AllCourses(props) {
 
   var user = JSON.parse(sessionStorage.getItem('user'))
   let config = {
@@ -11,12 +12,14 @@ export default function Courses(props) {
     }
   }
 
+  const user1 = AuthService.getCurrentUser();
+  console.log(user1)
+
   const [courses, setcourses] = useState([]);
 
   const getData = async () => {
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/all/courses", config)
       .then(res => {
-        console.log(res.data)
         return res;
       })
       .catch(err => {
@@ -31,7 +34,7 @@ export default function Courses(props) {
 
   return (<>
 
-    {(user.role == 0) ? <>
+    {(user?.role == "student") ? <>
       <div class=" row justify-content-md-center ">
 
         <div class="col-xxl-5 col-xl-6 col-md-7 col-sm-8 col-11">
@@ -47,7 +50,7 @@ export default function Courses(props) {
       </div>
     </> : <>
     {
-        (user.role == 1) ? <>Redirect to teacher homepage </> :<>Redirect to admin homepage</>
+        (user?.role == "tutor") ? <>Redirect to teacher homepage </> :<>Redirect to admin homepage</>
 
     }
     </>}

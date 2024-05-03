@@ -19,55 +19,52 @@ import TeacherCourseTask from './components/Teacher/TeacherCourseTask.js'
 import TeacherCourseTasksSettings from './components/Teacher/TeacherCourseTasksSettings.js'
 
 function App() {
-  
+
   localStorage.setItem("api_path", "http://localhost:8080/")
-  const [user, setUser] = useState(
+  
 
-  );
-  //sessionStorage.setItem("user_jwt", "response.data") //logowanie bez logowania
 
-  useEffect(() => { //tutaj pobiore dane z serwera o uzytkowniku
-    const user = AuthService.getCurrentUser();
-    if (user) {
-      setUser(user);
-      console.log(user)
-    }
-  }, []
+  return (
+    <>
 
-  )
-    return (
-      <>
-        
-        <Routes>
-          <Route element={<PrivateRoutes/>}>      
-            <Route path="" element={< AllCourses/>} />
-            {/* user routs */}
-            <Route path="/courses" element={< AllCourses/>} />
-            <Route path="/usercourses" element={ < UserCourses/>} />
-            <Route path="/usercourse" element={ <NotFound />} />
-            <Route path="/usercourse/:course_id" element={< UserCourse/>} />
+      <Routes>
+        <Route element={<PrivateRoutes />}>
+          <Route path="" element={< AllCourses />} />
+          {/* user routs */}
+          {(JSON.parse(sessionStorage.getItem('user'))?.role == "student") ? <>
+            <Route path="/" element={< AllCourses />} />
+            <Route path="/courses" element={< AllCourses />} />
+            <Route path="/usercourses" element={< UserCourses />} />
+            <Route path="/usercourse" element={<NotFound />} />
+            <Route path="/usercourse/:course_id" element={< UserCourse />} />
             <Route path="/usertask" element={<NotFound />} />
-            <Route path="/usertask/:task_id" element={< Task/>} />
-            <Route path="/userslist" element={< UsersList/>} />
-            {/* teacher routs */}
-            <Route path="/teacher/courseslist" element={< TeacherCoursesList/>} />  {/* lista kursow */}
-            <Route path="/teacher/course/:course_id" element={< TeacherCourse/>} /> {/* podglad konkretnego kursu */}
-            <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings/>} /> {/* edycja konkretnego kursu*/}
+            <Route path="/usertask/:task_id" element={< Task />} />
+            <Route path="/userslist" element={< UsersList />} />
+          </> : <></> }
+          
+          {/* teacher routs */}
+          {(JSON.parse(sessionStorage.getItem('user'))?.role == "tutor") ? <>
+            <Route path="/teacher/courseslist" element={< TeacherCoursesList />} />  {/* lista kursow */}
+            <Route path="/teacher/course/:course_id" element={< TeacherCourse />} /> {/* podglad konkretnego kursu */}
+            <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings />} /> {/* edycja konkretnego kursu*/}
+            <Route path="/teacher/course/tasks" element={< TeacherCourse />} />
+            <Route path="/teacher/course/tasks/:task_id" element={< TeacherCourseTask />} />  {/* podglad zadania*/}
+            <Route path="/teacher/course/tasks/settings/:task_id" element={< TeacherCourseTasksSettings />} /> {/* edycja zadania*/}
+          </> : <></>}
 
-            {/* <Route path="/teacher/course/tasks" element={< TeacherCourseTasks/>} /> */}
-            <Route path="/teacher/course/tasks/:task_id" element={< TeacherCourseTask/>} />  {/* podglad zadania*/}
-            <Route path="/teacher/course/tasks/settings/:task_id" element={< TeacherCourseTasksSettings/>} /> {/* edycja zadania*/}
+          {/* admin routs */}
+          {(JSON.parse(sessionStorage.getItem('user'))?.role == "tutor") ? <>
+          
+          
+          </>:<></>}
+        </Route>
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={< Register />} />
+        <Route path="*" element={<NotFound />}></Route>
+      </Routes>
+    </>
+  );
 
-
-            {/* admin routs */}
-          </Route>
-          <Route path="/login" element={ <Login/>} />
-          <Route path="/register" element={ < Register/>} />
-          <Route path="*" element={<NotFound />}></Route>
-        </Routes>
-      </>
-    );
- 
 }
 
 export default App;

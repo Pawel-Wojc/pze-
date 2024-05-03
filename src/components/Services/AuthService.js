@@ -17,19 +17,16 @@ const login = (user) => {
   return axios.request(config)
     .then((response) => {
       if (response.request.status == 200) {
-        console.log("user login ok!");
-        console.log(response.data);
         
         sessionStorage.setItem("user_jwt", response.data)
-        //getCurrentUser();
-        window.location.reload()
-        //getCurrentUser()
-        //var user = JSON.parse(sessionStorage.getItem('user'))
-        //if (user.Role = 4 ){ //user is locked
-        //sessionStorage.removeItem("user_jwt")
-        //}else {
-        // sessionStorage.setItem("user_jwt", response.data)
-        //}  
+        getCurrentUser();
+        console.log("after" + localStorage.getItem("user"))
+        if (localStorage.getItem("user")) {
+          window.location.reload()
+        }
+        
+        console.log("login ok " + response.data)
+        
       }
     }
     )
@@ -55,7 +52,6 @@ const register = (user) => {
     .then((response) => {
       if (response.request.status == 200) {
         console.log("user registered ok!");
-
         //sessionStorage.setItem("user_jwt", response.data)
         //window.location.reload()
       }
@@ -64,33 +60,39 @@ const register = (user) => {
     .catch((error) => {
       console.log(error);
     });
-
+    return
 
 }
 
 
-const usercurrent = {id:203 ,name:"Pawel", surname:"Wojcik", mail:"pawel@gmail.com", role:1, is_account_blocker:false}
-const getCurrentUser = () => { //get information about current loged user
-  // const user = jwtDecode(localStorage.getItem("user_jwt"));
-  // await axios.get(localStorage.getItem("api_path") + 'get/user/' + user.id)
-  //   .then(res => {
-  //     sessionStorage.setItem("user", res)
-  //     //return res;
-  //   }).catch(err => {
-  //     console.log(err)
-  //   })
-
+function getCurrentUser() { //get information about current loged user
+  let jwt = sessionStorage.getItem("user_jwt")
   
+  if (jwt) {
+    let config = {
+      headers: {
+        Authorization: "Bearer " + jwt
+      }
+    }
 
-  if (sessionStorage.getItem("user_jwt")){
-    sessionStorage.setItem('user', JSON.stringify(usercurrent))
- }  
-  return usercurrent
-  
+  const user = jwtDecode(jwt);
+  axios.get(localStorage.getItem("api_path") + 'get/user/' + user.id, config)
+      .then(res => {
+        console.log("tutajd")
+        sessionStorage.setItem('user', JSON.stringify(res.data))
+        console.log(sessionStorage.getItem("user"))
+        return res
+      }).catch(err => {
+        console.log(err)
+      })
+    
+  }
+
 };
 
 const logout = () => {
   sessionStorage.removeItem("user_jwt");
+  sessionStorage.removeItem("user");
   window.location.reload();
 };
 

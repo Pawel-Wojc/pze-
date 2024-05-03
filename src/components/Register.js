@@ -37,7 +37,6 @@ export default function Register() {
   function onSubmit (data) {
     delete data.confirmPassword
     
-    console.log(data)
     try {
       AuthService.register(register).then(
         () => {

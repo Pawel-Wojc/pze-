@@ -17,7 +17,6 @@ export default function Course() {
   const getData = async () => {
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/course/details/" + course_id, config)
       .then(res => {
-        console.log(res.data)
         return res;
       })
       .catch(err => {
@@ -38,7 +37,6 @@ export default function Course() {
       {tasks.map(task => (
         <div class="card" style={{ width: '40rem', margin: '10px' }}>
           <div class="card-body">
-            {console.log(task)}
             <Link to={`/usertask/${task.id}`} class="card-title" state={{ from: "course", course_id: course_id, task_id: task.id }}>
               {task.title}
             </Link>

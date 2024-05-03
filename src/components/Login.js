@@ -30,19 +30,16 @@ export default function Login(props) {
 
 
   function onSubmit(data) {
-   
-    try {
-      AuthService.login(data).then(
-        () => {
-          console.log(auth)
-        },
-        (error) => {
-          console.log(error);
-        },
-      );
-    } catch (err) {
-      console.log(err);
-    }
+
+
+    AuthService.login(data).then(
+      () => {
+      },
+      (error) => {
+        console.log(error);
+      },
+    );
+
   }
 
   return (
