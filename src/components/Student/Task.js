@@ -6,41 +6,35 @@ import { useQuery } from 'react-query';
 import axios from 'axios';
 
 export default function Task() {
+  let { task_id } = useParams();
   let config = {
     method: 'get',
-    url: localStorage.getItem("api_path") + "get/task/",
+    url: localStorage.getItem("api_path") + "get/task/"+task_id,
     headers: {
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
     }
   }
-  let { task_id } = useParams();
 
+  
   const [modalShow, setModalShow] = useState(false);
   const [sendDisable, setsendDisable] = useState(true);
 
-
   const getData = async () => {
-    const { data } = await axios.request( task_id, config)
+    const { data } = await axios.request( config)
       .then(res => {
         return res;
       })
       .catch(err => {
-        // console.error(err);
       })
     return data
   }
 
 
-
-
-
-  const { isLoading, isError, error, data } = useQuery('users', getData, { refetchOnWindowFocus: false })
-
+  const { isLoading, isError, error, data } = useQuery('task'+task_id, getData, { refetchOnWindowFocus: false })
 
   useEffect(() => {
-
     const date = new Date();
-    //const currentDate = `${date.getFullYear()}-${date.getMonth()+1}-${date.getDate()}`;
+
     const currentDate = new Date();
     const startDate = new Date(data?.date_of_start)
     const endDate = new Date(data?.date_of_end)
@@ -51,10 +45,6 @@ export default function Task() {
     }
   }, [data])
 
-
-
-
-
   if (isLoading) {
     return <div>Loading.. Tutaj mozna dac skeleton</div>
   }
@@ -62,11 +52,6 @@ export default function Task() {
     console.log("error")
     return <div>Errror, {error.message}</div>
   }
-
-
-
-
-
 
   return (
     <>

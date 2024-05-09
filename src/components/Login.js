@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-import { Link, Navigate, useNavigate } from 'react-router-dom';
+import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
 import AuthService from "./Services/AuthService";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -30,8 +30,6 @@ export default function Login(props) {
 
 
   function onSubmit(data) {
-
-
     AuthService.login(data).then(
       () => {
       },
@@ -77,6 +75,10 @@ export default function Login(props) {
         <div>Need an account? <Link to="/register">Register</Link></div>
       </div>
     </> :
-      <Navigate to="/" ></Navigate>
+      <>
+        {console.log("jest zalogowany")}
+        <Navigate to="/" ></Navigate>
+      </>
+
   )
 }

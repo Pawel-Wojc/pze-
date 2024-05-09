@@ -21,17 +21,24 @@ import TeacherCourseTasksSettings from './components/Teacher/TeacherCourseTasksS
 function App() {
 
   localStorage.setItem("api_path", "http://localhost:8080/")
-  
+
 
 
   return (
     <>
 
       <Routes>
+        
+        <Route path="/login" element={<Login />} />
+        <Route path="/register" element={< Register />} />
+        <Route path="*" element={<NotFound />}></Route>
+
         <Route element={<PrivateRoutes />}>
-          <Route path="" element={< AllCourses />} />
+          {console.log("session user z app.js: " + sessionStorage.getItem('user'))}
           {/* user routs */}
           {(JSON.parse(sessionStorage.getItem('user'))?.role == "student") ? <>
+            {console.log("z app.js to jest user")}
+            <Route path="" element={< AllCourses />} />
             <Route path="/" element={< AllCourses />} />
             <Route path="/courses" element={< AllCourses />} />
             <Route path="/usercourses" element={< UserCourses />} />
@@ -40,10 +47,12 @@ function App() {
             <Route path="/usertask" element={<NotFound />} />
             <Route path="/usertask/:task_id" element={< Task />} />
             <Route path="/userslist" element={< UsersList />} />
-          </> : <></> }
-          
+          </> : <></>}
+
           {/* teacher routs */}
           {(JSON.parse(sessionStorage.getItem('user'))?.role == "tutor") ? <>
+            <Route path="" element={< TeacherCoursesList />} />
+            <Route path="/" element={< TeacherCoursesList />} />
             <Route path="/teacher/courseslist" element={< TeacherCoursesList />} />  {/* lista kursow */}
             <Route path="/teacher/course/:course_id" element={< TeacherCourse />} /> {/* podglad konkretnego kursu */}
             <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings />} /> {/* edycja konkretnego kursu*/}
@@ -54,13 +63,11 @@ function App() {
 
           {/* admin routs */}
           {(JSON.parse(sessionStorage.getItem('user'))?.role == "tutor") ? <>
-          
-          
-          </>:<></>}
+
+
+          </> : <></>}
         </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={< Register />} />
-        <Route path="*" element={<NotFound />}></Route>
+
       </Routes>
     </>
   );

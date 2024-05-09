@@ -7,6 +7,7 @@ import Offcanvas from 'react-bootstrap/Offcanvas';
 import Userdetails from './UserDetails';
 import {Link} from 'react-router-dom';
 import AuthService from './Services/AuthService';
+import { useNavigate } from 'react-router-dom';
 
 export default function Header(props) {
     var user = JSON.parse(sessionStorage.getItem('user'))
@@ -14,6 +15,7 @@ export default function Header(props) {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const navigate = useNavigate();
     const logOut = () => {
         AuthService.logout();
       };
@@ -30,10 +32,12 @@ export default function Header(props) {
                             <Nav.Link as = {Link} to="/courses">Courses</Nav.Link>
                             <Nav.Link as = {Link} to="/usercourses">My courses</Nav.Link>
                         </> : <></> }
+
                         {(user.role == "tutor") ? 
                         <>
                             <Nav.Link as = {Link} to="/teacher/courseslist">Courses</Nav.Link>
                         </> : <></> }
+                        
                         {(user.role == "admin") ? 
                         <>
                             <Nav.Link as = {Link} to="/teacher/courseslist">Courses</Nav.Link>

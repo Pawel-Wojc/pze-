@@ -1,11 +1,13 @@
 import React from 'react'
 import axios from 'axios'
 import { useQuery } from 'react-query'
+import { useParams } from 'react-router-dom';
 
 export default function TeacherCourseTask() {
+  let { course_id } = useParams();
   let config = {
     method: 'get',
-    url: localStorage.getItem("api_path") + "course/get/course/details/" + 200,
+    url: localStorage.getItem("api_path") + "course/get/course/details/" + course_id,
     headers: {
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
     }
@@ -19,8 +21,8 @@ export default function TeacherCourseTask() {
         console.error(err);
         return err
       })
-      throw "error"
-    return 
+      
+    return data
   }
 
   const { isLoading, isError, error, data } = useQuery('users', getData, { refetchOnWindowFocus: false })

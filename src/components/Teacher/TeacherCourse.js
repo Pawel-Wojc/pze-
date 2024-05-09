@@ -5,52 +5,43 @@ import { useParams } from 'react-router-dom'
 export default function TeacherCourse() {
   let { course_id } = useParams();
   let config = {
-    method: 'get',
-    url: localStorage.getItem("api_path") + "course/get/course/details/" + course_id,
-    headers: {
+   headers: {
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
     }
   }
   const user = localStorage.getItem("user")
-
+  
   const getData = async () => {
-    const { data } = await axios.request(config)
+    const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/course/details/" + course_id,config)
       .then(res => {
         return res;
       })
       .catch(err => {
         console.error(err);
-        return err
       })
-    //checking course belong to user
-    // data.course_owners.map(owner => {
-    //   if (owner.id == user.id) {
-    //     console.log(owner.id)
-    //   }
-    // })
-    //let adam = data.course_owners.find(user.id)
-   // console.log("adam" + adam)
     return data
-
   }
-  const { isLoading, isError, error, data } = useQuery('users', getData, { refetchOnWindowFocus: false })
+
+  const {status, isLoading, isError, error, data } = useQuery( "teacher_course",getData, {cacheTime:0,refetchOnWindowFocus:false} )
 
   if (isLoading) {
-    return (<>Loading..</>)
-  }
-
-  if (data) {
-    console.log(data)
+    return <div>Loading.. Tutaj mozna dac skeleton</div>
   }
   if (isError) {
-    return (<>Error</>)
+    console.log("error")
+    return <div>Errror, {error.message}</div>
   }
-  return (
-    <>
-      {data.tasks.map(task => (
-        <>{task.title}</>
-      ))}
+  
+    return (
+      <>
+      <h1>{data.title}</h1>
+        
+        {data?.tasks.map((task)=>{
+        return <>{task.title}</>
+        })}
+      
+      
+      </>
+    )
 
-    </>
-  )
 }
