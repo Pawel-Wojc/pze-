@@ -1,10 +1,10 @@
-import React, { isValidElement, useState } from 'react'
+import React, { useState } from 'react'
 import { Button } from 'react-bootstrap';
 import { useForm } from "react-hook-form";
 import Form from 'react-bootstrap/Form';
-import Alert from 'react-bootstrap/Alert';
+
 import { Link, useNavigate } from 'react-router-dom';
-import AuthService from './Services/AuthService';
+
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import axios from 'axios';
@@ -37,16 +37,14 @@ export default function Register() {
   const { errors } = formState;
 
 
-  const [showAllert, setShowAllert] = useState(false);
-
   const navigate = useNavigate()
 
 
   function onSubmit(data) {
     delete register.confirmPassword
-    const response = axios.post(localStorage.getItem("api_path") + "register", data).then(
+    axios.post(localStorage.getItem("api_path") + "register", data).then(
       res => {
-        if (res.status = 201) {
+        if (res.status === 201) {
           setEmailIsTaken(false)
           setUserCreated(true)
           setTimeout(() => {
@@ -55,7 +53,7 @@ export default function Register() {
         }
       }
     ).catch(err => {
-      if (err.response.data == "java.lang.Exception: User with given mail already exists.") {
+      if (err.response.data === "java.lang.Exception: User with given mail already exists.") {
 
         setEmailIsTaken(true)
       }

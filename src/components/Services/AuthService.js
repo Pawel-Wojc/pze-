@@ -1,11 +1,10 @@
 import axios from "axios"
 import { jwtDecode } from 'jwt-decode'
-import { redirect } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 
-const login = (user) => {
+
+ const login = (user) => {
   let data = JSON.stringify(user);
-  
+
   let config = {
     method: 'post',
     maxBodyLength: Infinity,
@@ -18,10 +17,8 @@ const login = (user) => {
 
   return axios.request(config)
     .then((response) => {
-      if (response.request.status == 200) {  
+      if (response.request.status === 200) {
         sessionStorage.setItem("user_jwt", response.data)
-        getCurrentUser()
-        window.location.reload()
       }
     }
     )
@@ -30,7 +27,7 @@ const login = (user) => {
     });
 }
 
-const register = (user) => {
+ const register = (user) => {
   let data = JSON.stringify(user);
 
   let config = {
@@ -45,9 +42,7 @@ const register = (user) => {
 
   return axios.request(config)
     .then((response) => {
-      if (response.request.status == 200) {
-        console.log("user registered ok!");
-        
+      if (response.request.status === 200) {
       }
     }
     )
@@ -57,39 +52,30 @@ const register = (user) => {
 
 }
 
-
-function getCurrentUser() { //get information about current loged user
+ function getCurrentUser() { //get information about current loged user
   let jwt = sessionStorage.getItem("user_jwt")
-  
   if (jwt) {
     let config = {
       headers: {
         Authorization: "Bearer " + jwt
       }
     }
-
-  const user = jwtDecode(jwt);
-  axios.get(localStorage.getItem("api_path") + 'get/user/' + user.id, config)
+    const user = jwtDecode(jwt);
+    return axios.get(localStorage.getItem("api_path") + 'get/user/' + user.id, config)
       .then(res => {
-        sessionStorage.setItem('user', JSON.stringify(res.data))
-        return res
-      }).catch(err => {
-        console.log(err)
+        return res.data
+      }).catch(error => {
+        console.log(error)
       })
-    
-  }
+
+  }else {return ("user not found")}
 
 };
 
-const logout = () => {
-  sessionStorage.removeItem("user_jwt");
-  sessionStorage.removeItem("user");
-};
 
 const AuthService = {
   login,
   register,
-  logout,
   getCurrentUser
 };
 

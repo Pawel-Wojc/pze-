@@ -1,21 +1,15 @@
-import React, { useState } from 'react'
+import  {React, useContext } from 'react'
 import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
-import { Link, Navigate, redirect, useNavigate } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import AuthService from "./Services/AuthService";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
+import { CurrentUserContext } from './Utils/CurrentUserContext.js';
 
-export default function Login(props) {
-  const user_logged = props.user
-  const navigate = useNavigate()
-  let auth = sessionStorage.getItem("user_jwt")
-  const [user, setUser] = useState({
-    mail: '',
-    password: ''
-  })
-
+export default function Login() {
+  
   const validationSchema = Yup.object().shape({
     mail: Yup.string()
       .required('Email is required')
@@ -25,23 +19,34 @@ export default function Login(props) {
       .min(5, 'Invalid password'),
   });
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
+  const {
+    currentUser,
+    setCurrentUser
+  } = useContext(CurrentUserContext);
 
   function onSubmit(data) {
     AuthService.login(data).then(
       () => {
+        AuthService.getCurrentUser().then(
+          (res)=> {
+            setCurrentUser(res)
+          },(error) =>{
+            console.log(error)
+          }
+        )
       },
       (error) => {
         console.log(error);
       },
     );
-
+    
   }
 
   return (
-    !auth ? <>
+    !currentUser ? <>
       <div className="position-absolute top-50 start-50 translate-middle">
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="email">
@@ -76,8 +81,9 @@ export default function Login(props) {
       </div>
     </> :
       <>
-        {console.log("jest zalogowany")}
-        <Navigate to="/" ></Navigate>
+      {currentUser ?  <><Navigate to="/" ></Navigate></>:<></>}
+      
+        
       </>
 
   )

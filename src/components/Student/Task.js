@@ -33,8 +33,6 @@ export default function Task() {
   const { isLoading, isError, error, data } = useQuery('task'+task_id, getData, { refetchOnWindowFocus: false })
 
   useEffect(() => {
-    const date = new Date();
-
     const currentDate = new Date();
     const startDate = new Date(data?.date_of_start)
     const endDate = new Date(data?.date_of_end)
@@ -49,7 +47,6 @@ export default function Task() {
     return <div>Loading.. Tutaj mozna dac skeleton</div>
   }
   if (isError) {
-    console.log("error")
     return <div>Errror, {error.message}</div>
   }
 

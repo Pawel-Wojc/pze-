@@ -1,21 +1,18 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import axios from "axios"
 import { ListGroup } from 'react-bootstrap';
-import AuthService from '../Services/AuthService';
+import { useQuery } from 'react-query';
+
 
 export default function AllCourses(props) {
 
-  var user = JSON.parse(sessionStorage.getItem('user'))
   let config = {
     headers: {
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
     }
   }
 
-  const user1 = AuthService.getCurrentUser();
-  console.log(user1)
 
-  const [courses, setcourses] = useState([]);
 
   const getData = async () => {
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/all/courses", config)
@@ -26,36 +23,33 @@ export default function AllCourses(props) {
         // Handle errors
         console.error(err);
       })
-    setcourses(data);
-
+    return data;
   }
-  useEffect(() => { getData() }, [])
+
+  const { isLoading, isError, error, data } = useQuery('all_courses', getData, { refetchOnWindowFocus: false, })
+  if (isLoading) {
+    return <div>Loading.. Tutaj mozna dac skeleton</div>
+  }
+  if (isError) {
+    return <div>Errror, {error.message}</div>
+  }
+
 
 
   return (<>
-
-    {(user?.role == "student") ? <>
-      <div class=" row justify-content-md-center ">
-
-        <div class="col-xxl-5 col-xl-6 col-md-7 col-sm-8 col-11">
-          <ListGroup>
-            {courses.map((course, i) => (
-              <ListGroup.Item key={i}>
-                {course.title}
-                <button type="button" class="btn btn-success align-content-end">Join</button>
-              </ListGroup.Item>
-            ))}
-          </ListGroup>
-        </div>
+    <div class=" row justify-content-md-center ">
+      <div class="col-xxl-5 col-xl-6 col-md-7 col-sm-8 col-11">
+        <ListGroup>
+          {data.map((course, i) => (
+            <ListGroup.Item key={i}>
+              {course.title}
+              <button type="button" class="btn btn-success align-content-end">Join</button>
+            </ListGroup.Item>
+          ))}
+        </ListGroup>
       </div>
-    </> : <>
-    {
-        (user?.role == "tutor") ? <>Redirect to teacher homepage </> :<>Redirect to admin homepage</>
-
-    }
-    </>}
+    </div>
   </>
-
   )
 
 }

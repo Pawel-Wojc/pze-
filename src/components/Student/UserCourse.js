@@ -1,7 +1,7 @@
-import React, { Component } from 'react'
-import { useLocation } from 'react-router-dom'
+import React  from 'react'
+
 import { Link, useParams } from 'react-router-dom'
-import { useEffect, useState } from 'react';
+
 import axios from 'axios';
 import { useQuery } from 'react-query';
 export default function Course() {
@@ -37,10 +37,9 @@ export default function Course() {
     return <div>Loading.. Tutaj mozna dac skeleton</div>
   }
   if (isError) {
-    console.log("error")
     return <div>Errror, {error.message}</div>
   }
-  console.log(data)
+
   
   return (<>
      <div class="row justify-content-md-center" style={{}}>

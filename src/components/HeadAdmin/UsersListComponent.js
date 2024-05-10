@@ -1,7 +1,8 @@
-import {useState, useEffect} from "react";
+import {useState} from "react";
 
 const Users = () => {
     const [users, setUsers] = useState ();
+    setUsers("")
   return (
     <div>
         <h2>Users list</h2>

@@ -1,7 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom'
-import Course from './UserCourse'
-import { useState,useEffect } from 'react'
+import { useQuery } from 'react-query';
 import axios from 'axios'
 
 export default function MyCourses(props) {
@@ -11,35 +10,45 @@ export default function MyCourses(props) {
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
     }
   }
-  const [userCourses, setUserCourses] = useState([]);
+
 
   const getData = async () => {
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/user/courses", config).then(res => {
       return res;
     })
       .catch(err => {
-        // Handle errors
         console.error(err);
       })
-      setUserCourses(data);
+    return data
 
   }
-  useEffect(() => { getData() }, [])
+
+  const { isLoading, isError, error, data } = useQuery('courses_list', getData, { refetchOnWindowFocus: false, })
+  if (isLoading) {
+    return <div>Loading.. Tutaj mozna dac skeleton</div>
+  }
+  if (isError) {
+    return <div>Errror, {error.message}</div>
+  }
+
+
+
+
 
   return (<>
 
     <div class="row justify-content-md-center" style={{}}>
-      {userCourses.map(course => (
+      {data.map(course => (
         <div class="card" style={{ width: '40rem', margin: '10px' }}>
-          <div class="card-body">          
+          <div class="card-body">
             <Link to={`/usercourse/${course.id}`} class="card-title" >
-            {course.title}
-          </Link>
+              {course.title}
+            </Link>
             <div class="row">
               <div class="col">
               </div>
               <div class="col">
-                <p>Prowadzacy: {}</p>
+                <p>Prowadzacy: { }</p>
               </div>
             </div>
 

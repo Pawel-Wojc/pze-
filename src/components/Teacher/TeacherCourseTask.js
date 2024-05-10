@@ -2,35 +2,26 @@ import React from 'react'
 import axios from 'axios'
 import { useQuery } from 'react-query'
 import { useParams } from 'react-router-dom';
+import { useState } from 'react';
+import { Button } from 'react-bootstrap';
+import TeacherCourseTasksEdit from './TeacherCourseTaskEdit';
+import TeacherCourseTasksPreview from './TeacherCourseTaskPreview'
+import TeacherCourseTasksUsers from './TeacherCourseTaskUsers'
 
 export default function TeacherCourseTask() {
-  let { course_id } = useParams();
-  let config = {
-    method: 'get',
-    url: localStorage.getItem("api_path") + "course/get/course/details/" + course_id,
-    headers: {
-      Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
-    }
-  }
-  const getData = async () => {
-    const { data } = await axios.request(config)
-      .then(res => {
-        return res;
-      })
-      .catch(err => {
-        console.error(err);
-        return err
-      })
-      
-    return data
-  }
+  const [view, setView] = useState("preview");
+  let { task_id } = useParams();
 
-  const { isLoading, isError, error, data } = useQuery('users', getData, { refetchOnWindowFocus: false })
-
-  console.log(isError)
-
-
+  
   return (
-    <div>TeacherCourseTask</div>
+    <>
+      <Button onClick={() =>setView("edit")}>Edit</Button>
+      <Button onClick={() =>setView("preview")}>Preview</Button>
+      <Button onClick={() =>setView("users")}>Users</Button>
+
+      {view === "edit" && <TeacherCourseTasksEdit task_id = {task_id}></TeacherCourseTasksEdit> }
+      {view === "preview" && <TeacherCourseTasksPreview task_id = {task_id}></TeacherCourseTasksPreview> }
+      {view === "users" && <TeacherCourseTasksUsers task_id = {task_id}></TeacherCourseTasksUsers> }
+    </>
   )
 }

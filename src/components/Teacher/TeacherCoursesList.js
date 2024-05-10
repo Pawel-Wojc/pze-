@@ -1,8 +1,10 @@
-import React from "react"
+import { React } from "react"
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { Link } from "react-router-dom";
 import Button from 'react-bootstrap/Button';
+import Card from 'react-bootstrap/Card';
+
 
 export default function TeacherCoursesList() {
 
@@ -25,6 +27,8 @@ export default function TeacherCoursesList() {
     return data
   }
 
+
+
   const { isLoading, isError, error, data } = useQuery("teacher_courses_list", getData, { refetchOnWindowFocus: false })
 
   if (isLoading) {
@@ -32,11 +36,10 @@ export default function TeacherCoursesList() {
 
   }
   if (isError) {
-    console.log("error")
     return <div>Errror, {error.message}</div>
   }
-   
-   
+
+
 
   return (
     <>
@@ -44,18 +47,19 @@ export default function TeacherCoursesList() {
         <div>
           <Button variant="success"> Add new</Button>
         </div>
-        
-        
 
-         {data?.map((course) => {
+
+
+        {data?.map((course) => {
 
           return (
-            <div class="card" style={{ width: '40rem', margin: '10px' }}>
-              <div class="card-body">
+            <Card style={{ width: '40rem', margin: '10px' }}>
+              <Card.Body>
+              <Card.Title>
                 <Link to={`/teacher/course/${course.id}`} class="card-title" >
                   {course.title}
-
                 </Link>
+                </Card.Title>
                 <Button variant="danger"> Delete</Button>
                 <Button> Get Course Files</Button>
                 <div class="row">
@@ -66,12 +70,12 @@ export default function TeacherCoursesList() {
                   </div>
                 </div>
 
-              </div>
-            </div>
+              </Card.Body>
+            </Card>
 
           )
 
-        })} 
+        })}
       </div>
     </>
   )

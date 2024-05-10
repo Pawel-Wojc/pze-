@@ -16,59 +16,75 @@ import TeacherCoursesList from './components/Teacher/TeacherCoursesList.js'
 import TeacherCourse from './components/Teacher/TeacherCourse.js'
 
 import TeacherCourseTask from './components/Teacher/TeacherCourseTask.js'
-import TeacherCourseTasksSettings from './components/Teacher/TeacherCourseTasksSettings.js'
+
+
+import { CurrentUserContext } from './components/Utils/CurrentUserContext.js';
 
 function App() {
 
   localStorage.setItem("api_path", "http://localhost:8080/")
 
 
+  const [currentUser, setCurrentUser] = useState(null);
+
+
+  useEffect(() => {
+    if (sessionStorage.getItem("user_jwt")) { //if page was refresched
+      AuthService.getCurrentUser().then(
+        (res) => {
+          setCurrentUser(res)
+        }, (error) => {
+        }
+      )
+    }
+  }, []);
+
+
+
 
   return (
     <>
+      <CurrentUserContext.Provider value={{ currentUser, setCurrentUser }}>
+        <Routes>
 
-      <Routes>
-        
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={< Register />} />
-        <Route path="*" element={<NotFound />}></Route>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={< Register />} />
+          <Route path="*" element={<NotFound />}></Route>
 
-        <Route element={<PrivateRoutes />}>
-          {console.log("session user z app.js: " + sessionStorage.getItem('user'))}
-          {/* user routs */}
-          {(JSON.parse(sessionStorage.getItem('user'))?.role == "student") ? <>
-            {console.log("z app.js to jest user")}
-            <Route path="" element={< AllCourses />} />
-            <Route path="/" element={< AllCourses />} />
-            <Route path="/courses" element={< AllCourses />} />
-            <Route path="/usercourses" element={< UserCourses />} />
-            <Route path="/usercourse" element={<NotFound />} />
-            <Route path="/usercourse/:course_id" element={< UserCourse />} />
-            <Route path="/usertask" element={<NotFound />} />
-            <Route path="/usertask/:task_id" element={< Task />} />
-            <Route path="/userslist" element={< UsersList />} />
-          </> : <></>}
+          <Route element={<PrivateRoutes />}>        
+            {/* user routs */}
+            {(currentUser?.role === "student") ? <>
+              <Route path="" element={< AllCourses />} />
+              <Route path="/" element={< AllCourses />} />
+              <Route path="/courses" element={< AllCourses />} />
+              <Route path="/usercourses" element={< UserCourses />} />
+              <Route path="/usercourse" element={<NotFound />} />
+              <Route path="/usercourse/:course_id" element={< UserCourse />} />
+              <Route path="/usertask" element={<NotFound />} />
+              <Route path="/usertask/:task_id" element={< Task />} />
+              <Route path="/userslist" element={< UsersList />} />
+            </> : <></>}
 
-          {/* teacher routs */}
-          {(JSON.parse(sessionStorage.getItem('user'))?.role == "tutor") ? <>
-            <Route path="" element={< TeacherCoursesList />} />
-            <Route path="/" element={< TeacherCoursesList />} />
-            <Route path="/teacher/courseslist" element={< TeacherCoursesList />} />  {/* lista kursow */}
-            <Route path="/teacher/course/:course_id" element={< TeacherCourse />} /> {/* podglad konkretnego kursu */}
-            <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings />} /> {/* edycja konkretnego kursu*/}
-            <Route path="/teacher/course/tasks" element={< TeacherCourse />} />
-            <Route path="/teacher/course/tasks/:task_id" element={< TeacherCourseTask />} />  {/* podglad zadania*/}
-            <Route path="/teacher/course/tasks/settings/:task_id" element={< TeacherCourseTasksSettings />} /> {/* edycja zadania*/}
-          </> : <></>}
+            {/* teacher routs */}
+            {(currentUser?.role === "tutor") ? <>
+              <Route path="" element={< TeacherCoursesList />} />
+              <Route path="/" element={< TeacherCoursesList />} />
+              <Route path="/teacher/courseslist" element={< TeacherCoursesList />} />  {/* lista kursow */}
+              <Route path="/teacher/course/:course_id" element={< TeacherCourse />} /> {/* podglad konkretnego kursu */}
+              <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings />} /> {/* edycja konkretnego kursu*/}
+              <Route path="/teacher/course/tasks" element={< TeacherCourse />} />
+              <Route path="/teacher/course/tasks/:task_id" element={< TeacherCourseTask />} />  {/* podglad zadania*/}
+            </> : <></>}
 
-          {/* admin routs */}
-          {(JSON.parse(sessionStorage.getItem('user'))?.role == "tutor") ? <>
+            {/* admin routs */}
+            {(currentUser?.role === "tutor") ? <>
 
 
-          </> : <></>}
-        </Route>
+            </> : <></>}
+          </Route>
 
-      </Routes>
+        </Routes>
+      </CurrentUserContext.Provider>
     </>
   );
 

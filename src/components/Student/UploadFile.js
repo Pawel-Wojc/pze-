@@ -23,28 +23,28 @@ export default function UploadFile(props) {
             setAlertText("Select file first")
             return;
         } else {
-            console.log(fileList)
+            //console.log(fileList)
             files.forEach((file, i) => {
-                console.log(getExtension(file.name))
+                //console.log(getExtension(file.name))
             });
             //check available extensions then proced to upload. available file extensions from api 
             return;
         }
 
         // 👇 Create new FormData object and append files
-        const data = new FormData();
-        files.forEach((file, i) => {
-            data.append(`file-${i}`, file, file.name);
-        });
+        // const data = new FormData();
+        // files.forEach((file, i) => {
+        //     data.append(`file-${i}`, file, file.name);
+        // });
 
-        // 👇 Uploading the files using the fetch API to the server
-        fetch('tutaj link', {
-            method: 'POST',
-            body: data,
-        })
-            .then((res) => res.json())
-            .then((data) => console.log(data))
-            .catch((err) => console.error(err));
+        // // 👇 Uploading the files using the fetch API to the server
+        // fetch('tutaj link', {
+        //     method: 'POST',
+        //     body: data,
+        // })
+        //     .then((res) => res.json())
+        //     .then((data) => console.log(data))
+        //     .catch((err) => console.error(err));
     };
     const files = fileList ? [...fileList] : [];
 
