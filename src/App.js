@@ -11,9 +11,8 @@ import NotFound from './components/NotFound.js';
 import AuthService from './components/Services/AuthService.js';
 import PrivateRoutes from './components/Utils/PrivateRoutes.js'
 import Task from './components/Student/Task.js';
-import TeacherCourseSettings from './components/Teacher/TeacherCourseSettings.js'
 import TeacherCoursesList from './components/Teacher/TeacherCoursesList.js'
-import TeacherCourse from './components/Teacher/TeacherCourse.js'
+import TeacherCourseDetails from './components/Teacher/TeacherCourseDetails.js'
 
 import TeacherCourseTask from './components/Teacher/TeacherCourseTask.js'
 
@@ -70,9 +69,7 @@ function App() {
               <Route path="" element={< TeacherCoursesList />} />
               <Route path="/" element={< TeacherCoursesList />} />
               <Route path="/teacher/courseslist" element={< TeacherCoursesList />} />  {/* lista kursow */}
-              <Route path="/teacher/course/:course_id" element={< TeacherCourse />} /> {/* podglad konkretnego kursu */}
-              <Route path="/teacher/course/settings/:course_id" element={< TeacherCourseSettings />} /> {/* edycja konkretnego kursu*/}
-              <Route path="/teacher/course/tasks" element={< TeacherCourse />} />
+              <Route path="/teacher/course/:course_id" element={< TeacherCourseDetails />} /> {/* podglad konkretnego kursu */}
               <Route path="/teacher/course/tasks/:task_id" element={< TeacherCourseTask />} />  {/* podglad zadania*/}
             </> : <></>}
 

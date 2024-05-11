@@ -54,7 +54,6 @@ export default function Register() {
       }
     ).catch(err => {
       if (err.response.data === "java.lang.Exception: User with given mail already exists.") {
-
         setEmailIsTaken(true)
       }
     })

@@ -12,16 +12,18 @@ export default function TeacherCourseTask() {
   const [view, setView] = useState("preview");
   let { task_id } = useParams();
 
-  
-  return (
-    <>
-      <Button onClick={() =>setView("edit")}>Edit</Button>
-      <Button onClick={() =>setView("preview")}>Preview</Button>
-      <Button onClick={() =>setView("users")}>Users</Button>
 
-      {view === "edit" && <TeacherCourseTasksEdit task_id = {task_id}></TeacherCourseTasksEdit> }
-      {view === "preview" && <TeacherCourseTasksPreview task_id = {task_id}></TeacherCourseTasksPreview> }
-      {view === "users" && <TeacherCourseTasksUsers task_id = {task_id}></TeacherCourseTasksUsers> }
-    </>
+  return (
+    <div className='container'>
+      <br></br>
+      <Button onClick={() => setView("edit")}>Edit</Button> {' '}
+      <Button onClick={() => setView("preview")} >Preview</Button>{' '}
+      <Button onClick={() => setView("users")}>Users</Button>{' '}
+      <br></br>
+      <br></br>
+      {view === "edit" && <TeacherCourseTasksEdit task_id={task_id}></TeacherCourseTasksEdit>}
+      {view === "preview" && <TeacherCourseTasksPreview task_id={task_id}></TeacherCourseTasksPreview>}
+      {view === "users" && <TeacherCourseTasksUsers task_id={task_id}></TeacherCourseTasksUsers>}
+    </div>
   )
 }
