@@ -22,12 +22,8 @@ export default function TeacherCourseTaskEdit({ task_id }) {
     date_of_start: Yup.date()
       .required('Start date is required'),
     //date_of_end:Yup.date(),
-    max_total_files_volume: Yup.number()
+    max_total_files_amount: Yup.number()
       .max(10, 'Max number of files is 10'),
-
-
-
-
   })
   const formOptions = { resolver: yupResolver(validationSchema) };
   const { register, handleSubmit, reset, formState } = useForm(formOptions);
@@ -54,6 +50,7 @@ export default function TeacherCourseTaskEdit({ task_id }) {
 
 
   const updateData = async (datatosend) => {
+    console.log(datatosend)
     let updateDataConfig = {
       method: 'post',
       url: localStorage.getItem("api_path") + "update/task",
@@ -169,14 +166,14 @@ export default function TeacherCourseTaskEdit({ task_id }) {
               className="mb-3"
             >
               <Form.Control
-                {...register('max_total_files_volume')}
+                {...register('max_total_files_amount')}
                 label="Title"
-                defaultValue={data.max_total_files_volume}
+                defaultValue={data.max_total_files_amount}
                 type="number"
-                name="max_total_files_volume"
-                className={`form-control ${errors.max_total_files_volume ? 'is-invalid' : ''}`}
+                name="max_total_files_amount"
+                className={`form-control ${errors.max_total_files_amount ? 'is-invalid' : ''}`}
               />
-              <div className="invalid-feedback">{errors.max_total_files_volume?.message}</div>
+              <div className="invalid-feedback">{errors.max_total_files_amount?.message}</div>
             </FloatingLabel>
             <FloatingLabel
               controlId="floatingTextAreaAvailableFileExtensions"

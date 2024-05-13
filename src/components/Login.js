@@ -1,4 +1,4 @@
-import  {React, useContext } from 'react'
+import { React, useContext, useState } from 'react'
 import { Button } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Link, Navigate } from 'react-router-dom';
@@ -7,9 +7,12 @@ import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import { CurrentUserContext } from './Utils/CurrentUserContext.js';
+import axios from 'axios';
+import { jwtDecode } from 'jwt-decode'
+import { Toast, ToastContainer } from 'react-bootstrap';
 
 export default function Login() {
-  
+
   const validationSchema = Yup.object().shape({
     mail: Yup.string()
       .required('Email is required')
@@ -22,32 +25,69 @@ export default function Login() {
   const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
+  const [showToast, setShowToast] = useState(false);
   const {
     currentUser,
     setCurrentUser
   } = useContext(CurrentUserContext);
 
   function onSubmit(data) {
-    AuthService.login(data).then(
-      () => {
-        AuthService.getCurrentUser().then(
-          (res)=> {
-            setCurrentUser(res)
-          },(error) =>{
-            console.log(error)
-          }
-        )
+
+    let config = {
+      method: 'post',
+      maxBodyLength: Infinity,
+      url: localStorage.getItem("api_path") + 'login',
+      headers: {
+        'Content-Type': 'application/json'
       },
-      (error) => {
-        console.log(error);
-      },
-    );
-    
+      data: JSON.stringify(data)
+    };
+
+    axios.request(config).then(
+      (res) => {
+        if (res.request.status === 200) {
+          sessionStorage.setItem("user_jwt", res.data)
+          getCurrentUser()
+        }
+      }, (err) => {
+        if (err.response.status == 403) {
+          setShowToast(true)
+        }
+
+      }
+    )
+
+    function getCurrentUser() {
+      const userToken = sessionStorage.getItem("user_jwt")
+      const userId = jwtDecode(userToken).id;
+      let config = {
+        method: 'get',
+        url: localStorage.getItem("api_path") + 'get/user/' + userId,
+        headers: {
+          Authorization: "Bearer " + userToken
+        }
+      }
+
+      axios.request(config).then(
+        (res) => {
+          setCurrentUser(res.data)
+          return res
+        }, (error) => {
+          return error
+        }
+      )
+    }
   }
 
   return (
     !currentUser ? <>
+      <ToastContainer position='top-end'>
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg='danger' autohide>
+          <Toast.Header>Invalid email or password</Toast.Header>
+        </Toast>
+      </ToastContainer>
       <div className="position-absolute top-50 start-50 translate-middle">
+
         <Form onSubmit={handleSubmit(onSubmit)}>
           <Form.Group className="mb-3" controlId="email">
             <Form.Control
@@ -72,7 +112,6 @@ export default function Login() {
             />
             <div className="invalid-feedback">{errors.password?.message}</div>
           </Form.Group>
-
           <Button variant="primary" type='Submit'>
             Login
           </Button>
@@ -81,9 +120,9 @@ export default function Login() {
       </div>
     </> :
       <>
-      {currentUser ?  <><Navigate to="/" ></Navigate></>:<></>}
-      
-        
+        {currentUser ? <><Navigate to="/" ></Navigate></> : <></>}
+
+
       </>
 
   )

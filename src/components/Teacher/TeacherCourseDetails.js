@@ -49,7 +49,7 @@ export default function TeacherCourseDetails() {
       contents: '',
       date_of_end: null,
       date_of_start: new Date(),
-      max_total_files_volume: 1,
+      max_total_files_amount: 1,
     };
 
     let config = {

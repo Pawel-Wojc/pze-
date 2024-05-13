@@ -2,32 +2,36 @@ import axios from "axios"
 import { jwtDecode } from 'jwt-decode'
 
 
- const login = (user) => {
-  let data = JSON.stringify(user);
+// const login = (user) => {
+//   let data = JSON.stringify(user);
 
-  let config = {
-    method: 'post',
-    maxBodyLength: Infinity,
-    url: localStorage.getItem("api_path") + 'login',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    data: data
-  };
+//   let config = {
+//     method: 'post',
+//     maxBodyLength: Infinity,
+//     url: localStorage.getItem("api_path") + 'login',
+//     headers: {
+//       'Content-Type': 'application/json'
+//     },
+//     data: data
+//   };
 
-  return axios.request(config)
-    .then((response) => {
-      if (response.request.status === 200) {
-        sessionStorage.setItem("user_jwt", response.data)
-      }
-    }
-    )
-    .catch((error) => {
-      console.log(error);
-    });
-}
+//   axios.request(config).then(
+//     (res) => {
+//       if (res.request.status === 200) {
+//         sessionStorage.setItem("user_jwt", res.data)
+//       }
+//       return res
+//     },(error) => {
+//       return error
+//     }
+//   )
+//     .catch((error) => {
+//       return error
 
- const register = (user) => {
+//     });
+// }
+
+const register = (user) => {
   let data = JSON.stringify(user);
 
   let config = {
@@ -52,7 +56,7 @@ import { jwtDecode } from 'jwt-decode'
 
 }
 
- function getCurrentUser() { //get information about current loged user
+function getCurrentUser() { //get information about current loged user
   let jwt = sessionStorage.getItem("user_jwt")
   if (jwt) {
     let config = {
@@ -68,15 +72,15 @@ import { jwtDecode } from 'jwt-decode'
         console.log(error)
       })
 
-  }else {return ("user not found")}
+  } else { return ("user not found") }
 
 };
 
 
 const AuthService = {
-  login,
   register,
-  getCurrentUser
+  // login,
+   getCurrentUser
 };
 
 export default AuthService
