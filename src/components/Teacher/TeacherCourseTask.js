@@ -18,7 +18,7 @@ export default function TeacherCourseTask() {
       <br></br>
       <Button onClick={() => setView("edit")}>Edit</Button> {' '}
       <Button onClick={() => setView("preview")} >Preview</Button>{' '}
-      <Button onClick={() => setView("users")}>Users</Button>{' '}
+      {/* <Button onClick={() => setView("users")}>Users</Button>{' '} */}
       <br></br>
       <br></br>
       {view === "edit" && <TeacherCourseTasksEdit task_id={task_id}></TeacherCourseTasksEdit>}

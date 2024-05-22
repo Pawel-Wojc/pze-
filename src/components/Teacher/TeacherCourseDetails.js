@@ -49,7 +49,7 @@ export default function TeacherCourseDetails() {
       contents: '',
       date_of_end: null,
       date_of_start: new Date(),
-      max_total_files_amount: 1,
+      max_total_files_volume: 1,
     };
 
     let config = {
@@ -87,7 +87,6 @@ export default function TeacherCourseDetails() {
   }
 
   //deleting task
-
   const deleteTask = async (taskId) => {
     let config = {
       method: 'delete',
@@ -135,24 +134,19 @@ export default function TeacherCourseDetails() {
     await axios.request(config)
       .then(res => {
         if (res.status === 200) {
-         const href = window.URL.createObjectURL(res.data);
-        const anchorElement = document.createElement('a');
-         anchorElement.href = href;
-         anchorElement.download = taskTitle+".zip";
-         document.body.appendChild(anchorElement);
-         anchorElement.click();
-         document.body.removeChild(anchorElement);
-         window.URL.revokeObjectURL(href);
-
-
+          const href = window.URL.createObjectURL(res.data);
+          const anchorElement = document.createElement('a');
+          anchorElement.href = href;
+          anchorElement.download = taskTitle + ".zip";
+          document.body.appendChild(anchorElement);
+          anchorElement.click();
+          document.body.removeChild(anchorElement);
+          window.URL.revokeObjectURL(href);
         } else {
           settoastText("Something went wrong")
-        settoastVariant("danger")
-        setShowToast(true)
+          settoastVariant("danger")
+          setShowToast(true)
         }
-        
-
-
         console.log(res)
         return res;
       })

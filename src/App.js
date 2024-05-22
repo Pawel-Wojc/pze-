@@ -61,7 +61,7 @@ function App() {
               <Route path="/usercourse/:course_id" element={< UserCourse />} />
               <Route path="/usertask" element={<NotFound />} />
               <Route path="/usertask/:task_id" element={< Task />} />
-              <Route path="/userslist" element={< UsersList />} />
+              
             </> : <></>}
 
             {/* teacher routs */}
@@ -74,7 +74,10 @@ function App() {
             </> : <></>}
 
             {/* admin routs */}
-            {(currentUser?.role === "tutor") ? <>
+            {(currentUser?.role === "admin") ? <>
+            <Route path="" element={< UsersList />} />
+            <Route path="/" element={< UsersList />} />
+            <Route path="/userslist" element={< UsersList />} />
 
 
             </> : <></>}
