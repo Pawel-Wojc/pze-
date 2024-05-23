@@ -8,6 +8,8 @@ import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Toast, ToastContainer } from 'react-bootstrap';
+import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import editLogo from "./../../Icons/Pencil.svg"
 
 export default function TeacherCourseDetails() {
   let { course_id } = useParams();
@@ -154,7 +156,43 @@ export default function TeacherCourseDetails() {
         console.error(err);
       })
   }
-
+  //editing course name
+  const [isEditing, setisEditing] = useState(false);
+  const [courseTitle, setCourseTitlle] = useState("")
+  const saveCourseTitle = async () => {
+    data.title = courseTitle;
+    let config = {
+      method: 'post',
+      url: localStorage.getItem("api_path") + "course/update",
+      maxBodyLength: Infinity,
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
+      },
+      data: data
+    }
+    await axios.request(config).then(res => {
+      if (res.status === 200) {
+        settoastText("Course title saved")
+        settoastVariant("success")
+        setShowToast(true)
+      } else {
+        settoastText("Something went wrong")
+        settoastVariant("danger")
+        setShowToast(true)
+      }
+      handleClose()
+      refetch()
+      setFormValue("")
+      return res
+    })
+      .catch(err => {
+        settoastText("Something went wrong")
+        settoastVariant("danger")
+        setShowToast(true)
+        console.error(err);
+        return err
+      })
+  }
 
   //view
   if (isLoading) {
@@ -165,14 +203,14 @@ export default function TeacherCourseDetails() {
   }
 
   return (
-    <div className='container'>
+    <>
+
       <ToastContainer position='top-end'>
         <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
           <Toast.Header>{toastText}</Toast.Header>
         </Toast>
       </ToastContainer>
-      <h3>{data.title}</h3>
-      <Button variant="success" onClick={() => setModalShow(true)}>Add new</Button> {' '}
+
       <Modal show={modalShow} onHide={handleClose}>
         <Modal.Header closeButton>
           <Modal.Title>Name the title</Modal.Title>
@@ -191,26 +229,48 @@ export default function TeacherCourseDetails() {
         </Modal.Body>
       </Modal>
 
-      <div class="row justify-content-md-center">
-        {data?.tasks.map((task) => {
-          return <>
-            <Card style={{ width: '40rem', margin: '10px' }}>
-              <Card.Body>
-                <Card.Title>
-                  <Link to={`/teacher/course/tasks/${task.id}`} class="card-title">
-                    {task.title}
-                  </Link>
-                </Card.Title>
-                <Card.Text>
-                </Card.Text>
-                <Button variant="primary" onClick={() => downloadTask(task.id, task.title)} >Download</Button> {' '}
-                <Button variant="danger" onClick={() => deleteTask(task.id)}>Delete</Button>
-              </Card.Body>
-            </Card>
-          </>
-        })}
+      <div className='container'>
+
+        {!isEditing ? <h3> {data.title}
+          <Button variant='light' onClick={() => { setisEditing(!isEditing) ;setCourseTitlle(data.title)}}><img src={editLogo}></img></Button> </h3>
+          : <>
+            <FloatingLabel controlId="coursename" label="Name" className="mb-3">
+              <Form.Control
+                name="name"
+                onChange={(event) => setCourseTitlle(event?.target.value)}
+                value={courseTitle}
+                type='text'
+              />
+            </FloatingLabel>
+            <Button variant='light' onClick={() => { setisEditing(!isEditing); saveCourseTitle() }}>Save</Button>
+
+
+          </>}
+
+
+        <Button variant="success" onClick={() => setModalShow(true)}>Add new</Button> {' '}
+
+        <div className="row justify-content-md-center">
+          {data?.tasks.map((task) => {
+            return <>
+              <Card style={{ width: '40rem', margin: '10px' }}>
+                <Card.Body>
+                  <Card.Title>
+                    <Link to={`/teacher/course/tasks/${task.id}`} class="card-title">
+                      {task.title}
+                    </Link>
+                  </Card.Title>
+                  <Card.Text>
+                  </Card.Text>
+                  <Button variant="primary" onClick={() => downloadTask(task.id, task.title)} >Download</Button> {' '}
+                  <Button variant="danger" onClick={() => deleteTask(task.id)}>Delete</Button>
+                </Card.Body>
+              </Card>
+            </>
+          })}
+        </div>
       </div>
-    </div>
+    </>
   )
 
 }

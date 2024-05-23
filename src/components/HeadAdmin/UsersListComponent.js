@@ -144,10 +144,54 @@ const Users = () => {
         const filteredItems = allUsers?.filter(user =>
             user.name.toLowerCase().includes(formName.toLowerCase()) &&
             user.surname.toLowerCase().includes(formSurname.toLowerCase()) &&
-            user.role.toLowerCase().includes(formRole.toLowerCase())
+            user.role.includes(formRole)
         );
         setFilteredUsers(filteredItems);
+        console.log(filteredItems)
     }, [formName, formSurname, formRole, data])
+
+    //role change
+    const changeUserRole = async (userNewRole, userID, userMail) => {
+        console.log(userNewRole, userID)
+        // const updatedUsers = filteredUsers.map(user =>
+        //     user.id === userID ? { ...user, role: userNewRole } : user
+        // );
+
+
+        let config = {
+            url: localStorage.getItem("api_path") + "grant/" + userNewRole + "/role",
+            method: 'POST',
+            data: userMail,
+            headers: {
+                'Content-Type': 'text/plain',
+                Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
+            }
+        }
+        await axios.request(config)
+            .then(res => {
+                if (res.status === 200) {
+                    settoastText("User role changed succesfully")
+                    settoastVariant("success")
+                    setShowToast(true)
+                    refetch()
+
+                } else {
+                    settoastText("Something went wrong")
+                    settoastVariant("danger")
+                    setShowToast(true)
+                }
+                return res;
+            })
+            .catch(err => {
+                settoastText("Something went wrong")
+                settoastVariant("danger")
+                setShowToast(true)
+                console.error(err);
+            })
+
+
+
+    }
 
     if (isLoading) {
         return <div>Loading..</div>
@@ -156,53 +200,95 @@ const Users = () => {
         return <div>Errror, {error.message}</div>
     }
     return (
-        <div>
+        <div className="container">
             <ToastContainer position='top-end'>
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
                     <Toast.Header>{toastText}</Toast.Header>
                 </Toast>
             </ToastContainer>
+
             <h2>Users list</h2>
 
-            <FloatingLabel controlId="name" label="Name" className="mb-3">
-                <Form.Control
-                    name="name"
-                    onChange={(event) => setFormName(event?.target.value)}
-                    value={formName}
-                    type='text'
-                />
-            </FloatingLabel>
-            <FloatingLabel controlId="surname" label="Surname" className="mb-3">
-                <Form.Control
-                    name="surname"
-                    onChange={(event) => setFormSurname(event?.target.value)}
-                    value={formSurname}
-                    type='text'
-                />
-            </FloatingLabel>
-            <FloatingLabel controlId="roleselect" label="Select role">
-                <Form.Select aria-label=""
-                    onChange={(event) => setFormRole(event?.target.value)}
-                >
-                    <option value="" >Any</option>
-                    <option value="student">Student</option>
-                    <option value="tutor">Teacher</option>
-                    <option value="admin">Admin</option>
-                </Form.Select>
-            </FloatingLabel>
+            <div className="row">
+                <div className="col-sm">
+                    <FloatingLabel controlId="name" label="Name" className="mb-3">
+                        <Form.Control
+                            name="name"
+                            onChange={(event) => setFormName(event?.target.value)}
+                            value={formName}
+                            type='text'
+                        />
+                    </FloatingLabel>
+                </div>
+                <div className="col-sm">
+                    <FloatingLabel controlId="surname" label="Surname" className="mb-3">
+                        <Form.Control
+                            name="surname"
+                            onChange={(event) => setFormSurname(event?.target.value)}
+                            value={formSurname}
+                            type='text'
+                        />
+                    </FloatingLabel>
+                </div>
+                <div className="col-sm">
+                    <FloatingLabel controlId="roleselect" label="Select role">
+                        <Form.Select aria-label=""
+                            onChange={(event) => setFormRole(event?.target.value)}
+                        >
+                            <option value="" >Any</option>
+                            <option value="student">Student</option>
+                            <option value="tutor">Teacher</option>
+                            <option value="admin">Admin</option>
+                        </Form.Select>
+                    </FloatingLabel>
+                </div>
+            </div>
 
-            <ListGroup>
+            <div className="row">
+                <div className="col-sm"> Name</div>
+                <div className="col-sm"> Surname</div>
+                <div className="col-sm"> Email</div>
+                <div className="col-sm"> Role</div>
+                <div className="col-sm"> </div>
+            </div>
+            
                 {filteredUsers.map((user) => {
-                    return <>
-                        <ListGroup.Item>Name:  {user.name} Surname: {user.surname} Email: {user.mail}
+                    var domyslas = user.role
+                    return <div className="row border-success" >
+                        
+                        <div className="col-sm"> {user.name}</div>
+                        <div className="col-sm"> {user.surname}</div>
+                        <div className="col-sm"> {user.mail} </div>
+                        <div className="col-sm">
+                            <Form.Select
+                                id={user.role}
+                                value={user.role}
+                                onChange={(event) => changeUserRole(event?.target.value, user.id, user.mail)}
+                            >
+                                <option value="admin">Admin</option>
+                                <option value="tutor">Teacher</option>
+                                <option value="student">Student</option>
+                            </Form.Select>
+                        </div>
+
+                        <div className="col-sm">
                             {user.isAccountBlocked ?
                                 <Button variant="success" onClick={() => unblockUser(user.mail)}> Unblock</Button>
                                 : <Button variant="warning" onClick={() => blockUser(user.mail)}> Block</Button>}{' '}
                             <Button variant="danger" onClick={() => deleteUser(user.id)} > Delete</Button>
-                        </ListGroup.Item>
-                    </>
+
+                        </div>
+
+
+
+
+                    </div>
+
                 })}
-            </ListGroup>
+            
+
+
+
         </div>
     )
 }

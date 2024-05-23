@@ -159,59 +159,57 @@ export default function TeacherCoursesList() {
 
   return (
     <>
-      <div class="row justify-content-md-center" style={{}}>
-        <ToastContainer position='top-end'>
-          <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
-            <Toast.Header>{toastText}</Toast.Header>
-          </Toast>
-        </ToastContainer>
-        <div>
-          <Button variant="success" onClick={() => setModalShow(true)}>Add new</Button> {' '}
-          <Modal show={modalShow} onHide={handleClose}>
-            <Modal.Header closeButton>
-              <Modal.Title>Name the title</Modal.Title>
-            </Modal.Header>
-            <Modal.Body>
-              <Form onSubmit={addNewTask}>
-                <Form.Control
-                  onChange={(event) => setFormValue(event?.target.value)}
-                  value={formValue}
-                  type='text'
-                />
-                <Button variant="success" type="submit" >
-                  Add
-                </Button>
-              </Form>
-            </Modal.Body>
-          </Modal>
+      <ToastContainer position='top-end'>
+        <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
+          <Toast.Header>{toastText}</Toast.Header>
+        </Toast>
+      </ToastContainer>
+
+      <Modal show={modalShow} onHide={handleClose}>
+        <Modal.Header closeButton>
+          <Modal.Title>Name the title</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={addNewTask}>
+            <Form.Control
+              onChange={(event) => setFormValue(event?.target.value)}
+              value={formValue}
+              type='text'
+            />
+            <Button variant="success" type="submit" >
+              Add
+            </Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+
+
+      <div className="container" >
+        <h5>List of all your courses</h5>
+        <Button className="mt-1" variant="success" onClick={() => setModalShow(true)}>Add new</Button>
+
+        <div className="row justify-content-md-center">
+          {data?.map((course) => {
+            return (
+
+              <Card style={{ width: '40rem', margin: '5px' }}>
+                <Card.Body>
+                  <Card.Title>
+                    <Link to={`/teacher/course/${course.id}`} class="card-title" >
+                      {course.title}
+                    </Link>
+                  </Card.Title>
+                  <Button variant="danger" onClick={() => deleteTask(course.id)}> Delete</Button>
+                  <Button onClick={() => downloadCourse(course.id, course.title)}> Get Course Files</Button>
+                </Card.Body>
+              </Card>
+
+            )
+
+          })}
         </div>
 
-        {data?.map((course) => {
-
-          return (
-            <Card style={{ width: '40rem', margin: '10px' }}>
-              <Card.Body>
-                <Card.Title>
-                  <Link to={`/teacher/course/${course.id}`} class="card-title" >
-                    {course.title}
-                  </Link>
-                </Card.Title>
-                <Button variant="danger" onClick={() => deleteTask(course.id)}> Delete</Button>
-                <Button onClick={() => downloadCourse(course.id, course.title)}> Get Course Files</Button>
-                <div class="row">
-                  <div class="col">
-                  </div>
-                  <div class="col">
-
-                  </div>
-                </div>
-
-              </Card.Body>
-            </Card>
-
-          )
-
-        })}
       </div>
     </>
   )
