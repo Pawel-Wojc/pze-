@@ -99,7 +99,6 @@ const Users = () => {
                 settoastText("Something went wrong")
                 settoastVariant("danger")
                 setShowToast(true)
-                console.error(err);
             })
     }
     const deleteUser = async (userId) => {
@@ -147,7 +146,6 @@ const Users = () => {
             user.role.includes(formRole)
         );
         setFilteredUsers(filteredItems);
-        console.log(filteredItems)
     }, [formName, formSurname, formRole, data])
 
     //role change

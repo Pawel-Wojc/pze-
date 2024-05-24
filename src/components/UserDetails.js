@@ -5,7 +5,7 @@ export default function Userdetails (props) {
     return (
       <>
       Email: <br></br>
-      {user.Email} <br></br>  
+      {user.mail }<br></br>  
       </>
     )
 }

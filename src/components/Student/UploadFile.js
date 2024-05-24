@@ -2,11 +2,17 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 import ListGroup from 'react-bootstrap/ListGroup';
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { Alert } from 'react-bootstrap';
-
+import axios from 'axios';
+import { CurrentUserContext } from './../Utils/CurrentUserContext';
 
 export default function UploadFile(props) {
+
+    const {
+        currentUser,
+        setCurrentUser
+      } = useContext(CurrentUserContext);
 
     const [fileList, setFileList] = useState(null);
     const [alertShow, setAlertShow] = useState(true);
@@ -16,8 +22,8 @@ export default function UploadFile(props) {
         setFileList(e.target.files);
     };
 
-    
-    const handleUploadClick = () => {
+
+    const handleUploadClick = async () => {
         if (!fileList) {
             setAlertShow(true);
             setAlertText("Select file first")
@@ -28,14 +34,46 @@ export default function UploadFile(props) {
                 //console.log(getExtension(file.name))
             });
             //check available extensions then proced to upload. available file extensions from api 
-            return;
+
         }
 
-        // 👇 Create new FormData object and append files
-        // const data = new FormData();
-        // files.forEach((file, i) => {
-        //     data.append(`file-${i}`, file, file.name);
-        // });
+        //  Create new FormData object and append files
+        const data = new FormData();
+        files.forEach((file, i) => {
+            
+            let filename = props.title+currentUser.name+currentUser.surname+file.name+"."+getExtension(file.name);
+            data.append(`file`, file, filename);
+        });
+        
+
+        
+        
+
+
+        let sendFilesConfig = {
+            method: 'post',
+            url: localStorage.getItem("api_path") + "save/file/to/task/" + props.id,
+            maxBodyLength: Infinity,
+            headers: {
+                Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
+            },
+            data: data
+        }
+        console.log(files)
+        await axios.request(sendFilesConfig)
+            .then(
+
+                res => {
+                    console.log(res)
+                }
+
+            ).catch(
+                err => {
+                    console.log(err)
+                }
+            )
+
+
 
         // // 👇 Uploading the files using the fetch API to the server
         // fetch('tutaj link', {
@@ -59,11 +97,11 @@ export default function UploadFile(props) {
             >
                 <Modal.Header closeButton>
                     <Modal.Title id="contained-modal-title-vcenter">
-                        Modal heading
+                        Chose file
                     </Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
-                    <h4>Centered Modal</h4>
+                    <h5>Select all the files you want to send</h5>
                     <p>
                         <Form.Control type="file" onChange={handleFileChange} multiple />
                     </p>
@@ -90,4 +128,4 @@ export default function UploadFile(props) {
 
 function getExtension(filename) {
     return filename.split('.').pop()
-  }
+}

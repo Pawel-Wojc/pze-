@@ -248,9 +248,10 @@ export default function TeacherCourseDetails() {
           </>}
 
 
-        <Button variant="success" onClick={() => setModalShow(true)}>Add new</Button> {' '}
+        <Button variant="success" onClick={() => setModalShow(true)}>New task</Button> {' '}
 
         <div className="row justify-content-md-center">
+          {(!data.tasks || data.tasks.length ===0 )?<>There are no tasks here yet</>:<></>}
           {data?.tasks.map((task) => {
             return <>
               <Card style={{ width: '40rem', margin: '10px' }}>

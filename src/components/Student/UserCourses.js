@@ -38,6 +38,7 @@ export default function MyCourses(props) {
   return (<>
 
     <div class="row justify-content-md-center" style={{}}>
+      <h5>Your courses</h5>
       {data.map(course => (
         <div class="card" style={{ width: '40rem', margin: '10px' }}>
           <div class="card-body">

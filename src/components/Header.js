@@ -6,7 +6,6 @@ import Button from 'react-bootstrap/Button';
 import Offcanvas from 'react-bootstrap/Offcanvas';
 import Userdetails from './UserDetails';
 import {Link} from 'react-router-dom';
-
 import { CurrentUserContext } from './Utils/CurrentUserContext';
 
 export default function Header(props) {
