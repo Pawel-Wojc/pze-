@@ -24,19 +24,13 @@ export default function AllCourses() {
 
 
   const getData = async () => {
-    let config = {
-      headers: {
-        Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
-      }
-    }
-    const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/all/courses", config)
+    const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/all/courses")
       .then(res => {
         setAllItems(res.data)
         if (filteredItems.length == 0) {
           setFilteredItems(res.data)
         }
         return res;
-
       })
       .catch(err => {
         // Handle errors
@@ -46,20 +40,21 @@ export default function AllCourses() {
   }
   //joing to course
   const joinToCourse = async (courseID) => {
-    
+    const { files, ...currentUserWithoutFiles } = currentUser;
+
+
     let config = {
-      url: localStorage.getItem("api_path") + "curse/" + courseID + "/add/student",
+      url: localStorage.getItem("api_path") + "course/" + courseID + "/add/student",
       method: 'POST',
-      data: currentUser,
+      data: JSON.stringify(currentUserWithoutFiles),
       headers: {
-        'Content-Type': 'text/plain',
-        Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
+        'Content-Type': 'application/json',
       }
     }
-    console.log(currentUser)
     await axios.request(config)
       .then(res => {
         if (res.status === 200) {
+          console.log(res)
           settoastText("Joined")
           settoastVariant("success")
           setShowToast(true)
@@ -77,19 +72,17 @@ export default function AllCourses() {
         settoastText("Something went wrong")
         settoastVariant("danger")
         setShowToast(true)
-
       })
-
-
-
-
   }
-
   //searching
   const [formSearch, setFormSearch] = useState("");
+
   useEffect(() => {
+
     const newItemsList = allItems?.filter(course =>
-      course.title.toLowerCase().includes(formSearch.toLowerCase())
+      course.title.toLowerCase().includes(formSearch.toLowerCase()) ||
+      course.course_owners.some(owner => (owner.name.toLowerCase() + owner.surname.toLowerCase()).includes(formSearch.toLowerCase().replace(/\s+/g, '')) ||
+        owner.surname.toLowerCase().includes(formSearch.toLowerCase().replace(/\s+/g, '')))
     );
     setFilteredItems(newItemsList);
   }, [formSearch])
@@ -102,8 +95,6 @@ export default function AllCourses() {
   if (isError) {
     return <div>Errror, {error.message}</div>
   }
-
-
 
   return (
     <><ToastContainer position='top-end'>
@@ -123,13 +114,27 @@ export default function AllCourses() {
               />
             </FloatingLabel>
           </div>
-          <h4>After updating the backend, check whether it is working at all or not????</h4>
           <h5>List of all available courses</h5>
           <ListGroup>
             {filteredItems.map((course, i) => (
               <ListGroup.Item key={i} className=''>
-                {course.title}
-                <button type="button" class="btn btn-success " onClick={() => joinToCourse(course.id)}>Join</button>
+                <div className='container'>
+                  <div className='row'>
+                    <div className='col'>
+                      {course.title}
+                      {course.course_owners.length === 0 ? <></> : <>
+                        <br></br>
+                        <b>Teachers:</b> {course.course_owners.map((owner, i) => (
+                          <>{owner.name} {owner.surname} </>
+                        ))}
+                      </>}
+                    </div>
+                    <div className='col d-flex justify-content-end'>
+                      <button type="button" class="btn btn-success " onClick={() => joinToCourse(course.id)}>Join</button>
+
+                    </div>
+                  </div>
+                </div>
               </ListGroup.Item>
             ))}
           </ListGroup>
