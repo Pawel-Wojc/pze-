@@ -12,7 +12,7 @@ export default function UploadFile(props) {
     const {
         currentUser,
         setCurrentUser
-      } = useContext(CurrentUserContext);
+    } = useContext(CurrentUserContext);
 
     const [fileList, setFileList] = useState(null);
     const [alertShow, setAlertShow] = useState(true);
@@ -40,15 +40,10 @@ export default function UploadFile(props) {
         //  Create new FormData object and append files
         const data = new FormData();
         files.forEach((file, i) => {
-            
-            let filename = props.title+currentUser.name+currentUser.surname+file.name+"."+getExtension(file.name);
+
+            let filename = props.title + currentUser.name + currentUser.surname + file.name + "." + getExtension(file.name);
             data.append(`file`, file, filename);
         });
-        
-
-        
-        
-
 
         let sendFilesConfig = {
             method: 'post',

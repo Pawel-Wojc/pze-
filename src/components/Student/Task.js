@@ -16,7 +16,6 @@ export default function Task() {
     }
   }
 
-
   const [modalShow, setModalShow] = useState(false);
   const [sendDisable, setsendDisable] = useState(true);
 
@@ -32,7 +31,6 @@ export default function Task() {
 
 
   const { isLoading, isError, error, data } = useQuery('task' + task_id, getData, { refetchOnWindowFocus: false })
-
   useEffect(() => {
     const currentDate = new Date();
     const startDate = new Date(data?.date_of_start)
@@ -67,28 +65,21 @@ export default function Task() {
                 <h6>Wymagane od: {data.date_of_start} do:  {data.date_of_end}<br></br> Jakie pliki ile </h6>
               </div>
               <div class="col">
-
-
                 <UploadFile
                   id={data.id}
                   title={data.title}
                   extensions={data.available_file_extensions}
                   show={modalShow}
                   onHide={() => setModalShow(false)}
-
                 />
-
               </div>
-
             </div>
           </CardBody>
-
         </Card>
         {data.files?.map((file) => {
           return (<h5>{file.name}</h5>)
         })}
       </div>
-
     </>
   )
 }
