@@ -13,6 +13,7 @@ import PrivateRoutes from './components/Utils/PrivateRoutes.js'
 import Task from './components/Student/Task.js';
 import TeacherCoursesList from './components/Teacher/TeacherCoursesList.js'
 import TeacherCourseDetails from './components/Teacher/TeacherCourseDetails.js'
+import axios from 'axios';
 
 import TeacherCourseTask from './components/Teacher/TeacherCourseTask.js'
 
@@ -29,6 +30,7 @@ function App() {
 
   useEffect(() => {
     if (sessionStorage.getItem("user_jwt")) { //if page was refresched
+      axios.defaults.headers.common['Authorization'] = "Bearer " + sessionStorage.getItem("user_jwt");
       AuthService.getCurrentUser().then(
         (res) => {
           setCurrentUser(res)

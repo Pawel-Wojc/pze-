@@ -47,6 +47,7 @@ export default function Login() {
       (res) => {
         if (res.request.status === 200) {
           sessionStorage.setItem("user_jwt", res.data)
+          axios.defaults.headers.common['Authorization'] = "Bearer " + sessionStorage.getItem("user_jwt");
           getCurrentUser()
         }
       }, (err) => {
@@ -56,6 +57,8 @@ export default function Login() {
 
       }
     )
+
+    
 
     function getCurrentUser() {
       const userToken = sessionStorage.getItem("user_jwt")
