@@ -38,7 +38,7 @@ export default function AllCourses() {
       })
     return data;
   }
-  //joing to course
+  //joing to course     TODO: check if user is already in course
   const joinToCourse = async (courseID) => {
     const { files, ...currentUserWithoutFiles } = currentUser;
 

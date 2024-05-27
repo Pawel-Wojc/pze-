@@ -40,7 +40,6 @@ export default function UploadFile(props) {
         //  Create new FormData object and append files
         const data = new FormData();
         files.forEach((file, i) => {
-
             let filename = props.title + currentUser.name + currentUser.surname + file.name + "." + getExtension(file.name);
             data.append(`file`, file, filename);
         });

@@ -20,6 +20,7 @@ export default function TeacherCoursesList() {
   }
   const getData = async () => {
     const { data } = await axios.request(config).then(res => {
+      console.log(res)
       return res;
     })
       .catch(err => {
