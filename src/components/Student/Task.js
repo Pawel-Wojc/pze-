@@ -10,7 +10,8 @@ import Form from "react-bootstrap/Form";
 import { Alert } from "react-bootstrap";
 import { ListGroup } from "react-bootstrap";
 import { Toast, ToastContainer } from "react-bootstrap";
-
+import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
+import Tooltip from 'react-bootstrap/Tooltip';
 export default function Task() {
   const [showToast, setShowToast] = useState(false);
   const [toastText, settoastText] = useState("");
@@ -30,7 +31,6 @@ export default function Task() {
     },
   };
 
-  const [modalShow, setModalShow] = useState(false);
   const [sendDisable, setsendDisable] = useState(true);
 
   const getData = async () => {
@@ -41,7 +41,7 @@ export default function Task() {
         setFilesCurrentView(res.data.files);
         return res;
       })
-      .catch((err) => { });
+      .catch((err) => { console.log(err) });
     return data;
   };
 
@@ -64,7 +64,15 @@ export default function Task() {
     setFilesCurrentView(
       filesCurrentView.filter((currentFile) => currentFile !== file)
     )
-    setFilesToDelete([...filesToDelete, file]);
+
+    //checking we are deleting files that are not currently send, or we are deleteing a file which is in database
+    if (filesToSend?.includes(file)) {
+      setFilesToSend(filesToSend?.filter((currentFile) => currentFile !== file));
+    } else {
+      setFilesToDelete([...filesToDelete, file]);
+    }
+
+    console.log(filesToSend)
     console.log(filesToDelete)
   };
   const addFiles = (e) => {
@@ -77,22 +85,48 @@ export default function Task() {
   //adding files
 
   const handleFileChange = async (e) => {
-
     setFilesToSend(e.target.files);
     setFilesCurrentView([...filesCurrentView, ...Array.from(e.target.files)]);
-    console.log(filesCurrentView)
   };
 
   const saveChanges = async () => {
     filesCurrentView.map((file) => {
-      if (file.File){ //how to check the file is the File type or not ???
-        console.log(file)
+      if (file instanceof File) { //how to check the file is the File type or not ???
       }
+
     })
-  console.log(filesCurrentView)
+    console.log(data)
   }
   //const [fileList, setFileList] = useState(null);
   const files = filesToSend ? [...filesToSend] : [];
+
+  //checking file amount
+  useEffect(() => {
+    if (filesCurrentView.length > data?.max_total_files_amount) {
+      setsendDisable(true);
+    } else {
+      setsendDisable(false);
+    }
+  }, [filesCurrentView])
+  //saving files
+
+
+
+  const saveFiles = () => {
+    //check the list have been update: sendFiles, deletefiles
+    if (filesToSend.length === 0 && filesToDelete.length === 0) {
+      return;
+    }
+
+
+  }
+
+
+  const { refetchfiles, isLoadingFile, isErrorFile, errorFile, dataFile } = useQuery("file", saveFiles, { enabled: false, cacheTime: 0, refetchOnWindowFocus: false });
+
+
+
+
 
   if (isLoading) {
     return <div>Loading.. Tutaj mozna dac skeleton</div>;
@@ -103,39 +137,6 @@ export default function Task() {
 
   return (
     <>
-      <Modal
-        show={modalShow}
-        onHide={() => setModalShow(false)}
-        size="lg"
-        aria-labelledby="contained-modal-title-vcenter"
-        centered
-      >
-        <Modal.Header closeButton>
-          <Modal.Title id="contained-modal-title-vcenter">
-            Chose file
-          </Modal.Title>
-        </Modal.Header>
-        <Modal.Body>
-          <Form>
-            <h5>Select all the files you want to send</h5>
-            <p>
-              <Form.Control type="file" onChange={handleFileChange} onSubmit={addFiles} multiple />
-            </p>
-            <Button variant="success" type="submit" >
-              Add
-            </Button>
-          </Form>
-          <ListGroup>
-            {files.map((file, i) => (
-              <ListGroup.Item key={i}>{file.name}</ListGroup.Item>
-            ))}
-          </ListGroup>
-
-        </Modal.Body>
-        <Modal.Footer>
-
-        </Modal.Footer>
-      </Modal>
 
       <ToastContainer position="top-end">
         <Toast
@@ -168,16 +169,24 @@ export default function Task() {
                   <Form.Control type="file" onChange={handleFileChange} onSubmit={addFiles} multiple />
                 </p>
               </Form>
-
               <div>
-                Files: {data.files.length} of {data.max_total_files_amount}{" "}
+                <span style={{ color: (filesCurrentView?.length > data?.max_total_files_amount) ? "red" : "" }}>
+                  Files: {filesCurrentView?.length} of {data?.max_total_files_amount}{" "}
+                </span>
               </div>
+              <OverlayTrigger
+                placement="right"
+                delay={{ show: 250, hide: 400 }}
+                overlay={<Tooltip id="button-tooltip-2">The name of your file will be used as a comment, there is no need to call it by your first name or the name of the task </Tooltip>}
+              >
+                <Button variant="success">?</Button>
+              </OverlayTrigger>
             </CardTitle>
             <CardText>
               {filesCurrentView?.map((file) => {
                 return (
                   <li>
-                    {file.name}
+                    <span style={{ color: (file instanceof File) ? "green" : "black" }}>{file.name}</span>
                     <Button
                       variant="outline-dark"
                       onClick={() => deleteFile(file)}
@@ -192,7 +201,7 @@ export default function Task() {
               <Button
                 disabled={sendDisable}
                 variant="success"
-                onClick={()=>saveChanges()}
+                onClick={() => saveChanges()}
               >
                 Save
               </Button>
