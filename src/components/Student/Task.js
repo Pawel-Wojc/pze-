@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
 import UploadFile from "./UploadFile";
@@ -12,7 +12,14 @@ import { ListGroup } from "react-bootstrap";
 import { Toast, ToastContainer } from "react-bootstrap";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
+import { CurrentUserContext } from './../Utils/CurrentUserContext';
+
 export default function Task() {
+  const {
+    currentUser,
+    setCurrentUser
+  } = useContext(CurrentUserContext);
+
   const [showToast, setShowToast] = useState(false);
   const [toastText, settoastText] = useState("");
   const [toastVariant, settoastVariant] = useState("success");
@@ -45,7 +52,7 @@ export default function Task() {
     return data;
   };
 
-  const { isLoading, isError, error, data } = useQuery("task" + task_id, getData, { refetchOnWindowFocus: false });
+  const { refetch, isLoading, isError, error, data } = useQuery("task" + task_id, getData, { refetchOnWindowFocus: false });
 
   //checking the date is available to send
   useEffect(() => {
@@ -59,21 +66,107 @@ export default function Task() {
     }
   }, [data]);
 
+  //FILES
+  //delte files axios request
+  const deleteFiles = () => {
+    filesToDelete.forEach((file) => {
+      let config = {
+        method: "delete",
+        url: localStorage.getItem("api_path") + "delete/file/" + file.id,
+        maxBodyLength: Infinity,
+        headers: {
+          Authorization: "Bearer " + sessionStorage.getItem("user_jwt"),
+        },
+      }
+      axios
+        .request(config).then((res) => {
+          if (res.status === 200) {
+            settoastText("Changes saved successfully")
+            settoastVariant("success")
+            setShowToast(true)
+            setFilesToDelete([])
+            refetch()
+          } else {
+            settoastText("Something went wrong")
+            settoastVariant("danger")
+            setShowToast(true)
+          }
+
+        }).catch((err) => {
+          settoastText("Something went wrong")
+          settoastVariant("danger")
+          setShowToast(true)
+          console.log(err)
+        })
+    })
+
+  }
+
+  //send files axios request
+  const sendFiles = async () => {
+    let fileToSendFormData = new FormData();
+    filesToSend.forEach((file, i) => {
+      let filename = data.title + currentUser.name + currentUser.surname + file.name;
+      fileToSendFormData.append(`file`, file, filename);
+    });
+
+
+    let config = {
+      method: "post",
+      url: localStorage.getItem("api_path") + "save/file/to/task/" + data?.id,
+      maxBodyLength: Infinity,
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("user_jwt"),
+      },
+      data: fileToSendFormData,
+    }
+    await axios
+      .request(config).then((res) => {
+        if (res.status === 200) {
+          settoastText("Changes saved successfully")
+          settoastVariant("success")
+          setShowToast(true)
+          setFilesToSend([])
+          refetch()
+        } else {
+          settoastText("Something went wrong")
+          settoastVariant("danger")
+          setShowToast(true)
+        }
+
+      }).catch((err) => {
+        settoastText("Something went wrong")
+        settoastVariant("danger")
+        setShowToast(true)
+        console.log(err)
+      })
+  }
+
+
   //deleting files
   const deleteFile = async (file) => {
-    setFilesCurrentView(
+    setFilesCurrentView( //deleting file from current list of files
       filesCurrentView.filter((currentFile) => currentFile !== file)
     )
 
-    //checking we are deleting files that are not currently send, or we are deleteing a file which is in database
+    //checking we are deleting files that are not currently send, or we are deleteing a file which is send
     if (filesToSend?.includes(file)) {
       setFilesToSend(filesToSend?.filter((currentFile) => currentFile !== file));
     } else {
       setFilesToDelete([...filesToDelete, file]);
     }
 
-    console.log(filesToSend)
-    console.log(filesToDelete)
+
+    // //checking we are deleting files that are not currently send, or we are deleteing a file which is in database
+    // filesToSend?.map((currentFile) => {
+    //   if (currentFile === file) {
+    //     setFilesToSend(filesToSend?.filter((currentFile) => currentFile !== file)); //delete file from files to send
+
+    //   }
+
+    // })
+    // setFilesToDelete([...filesToDelete, file]); //add file to list to delete
+
   };
   const addFiles = (e) => {
     // setFilesCurrentView([...filesCurrentView, file]);
@@ -85,17 +178,22 @@ export default function Task() {
   //adding files
 
   const handleFileChange = async (e) => {
-    setFilesToSend(e.target.files);
+    setFilesToSend(Array.from(e.target.files));
     setFilesCurrentView([...filesCurrentView, ...Array.from(e.target.files)]);
   };
 
   const saveChanges = async () => {
-    filesCurrentView.map((file) => {
-      if (file instanceof File) { //how to check the file is the File type or not ???
-      }
-
-    })
-    console.log(data)
+    if (filesToSend.length === 0 && filesToDelete.length === 0) {
+      setShowToast(true)
+      settoastVariant("warning")
+      settoastText("No changes, nothing to save")
+    }
+    if (filesToDelete.length > 0) {
+      deleteFiles()
+    }
+    if (filesToSend.length > 0) {
+      sendFiles()
+    }
   }
   //const [fileList, setFileList] = useState(null);
   const files = filesToSend ? [...filesToSend] : [];
@@ -108,23 +206,6 @@ export default function Task() {
       setsendDisable(false);
     }
   }, [filesCurrentView])
-  //saving files
-
-
-
-  const saveFiles = () => {
-    //check the list have been update: sendFiles, deletefiles
-    if (filesToSend.length === 0 && filesToDelete.length === 0) {
-      return;
-    }
-
-
-  }
-
-
-  const { refetchfiles, isLoadingFile, isErrorFile, errorFile, dataFile } = useQuery("file", saveFiles, { enabled: false, cacheTime: 0, refetchOnWindowFocus: false });
-
-
 
 
 
@@ -211,4 +292,9 @@ export default function Task() {
       </div>
     </>
   );
+}
+
+
+function getExtension(filename) {
+  return filename.split('.').pop()
 }
