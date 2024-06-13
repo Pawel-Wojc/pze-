@@ -122,7 +122,6 @@ const Users = () => {
                     settoastVariant("danger")
                     setShowToast(true)
                 }
-                console.log(res)
                 return res;
             })
             .catch(err => {
@@ -150,12 +149,6 @@ const Users = () => {
 
     //role change
     const changeUserRole = async (userNewRole, userID, userMail) => {
-        console.log(userNewRole, userID)
-        // const updatedUsers = filteredUsers.map(user =>
-        //     user.id === userID ? { ...user, role: userNewRole } : user
-        // );
-
-
         let config = {
             url: localStorage.getItem("api_path") + "grant/" + userNewRole + "/role",
             method: 'POST',

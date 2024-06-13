@@ -1,14 +1,10 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import Button from "react-bootstrap/Button";
-import UploadFile from "./UploadFile";
 import { useQuery } from "react-query";
 import axios from "axios";
 import { Card, CardBody, CardFooter, CardText, CardTitle, } from "react-bootstrap";
-import Modal from "react-bootstrap/Modal";
 import Form from "react-bootstrap/Form";
-import { Alert } from "react-bootstrap";
-import { ListGroup } from "react-bootstrap";
 import { Toast, ToastContainer } from "react-bootstrap";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
@@ -24,7 +20,7 @@ export default function Task() {
   const [toastText, settoastText] = useState("");
   const [toastVariant, settoastVariant] = useState("success");
 
-  const [filesInDatabase, setFilesInDatabase] = useState([]);
+
   const [filesToSend, setFilesToSend] = useState([]);
   const [filesToDelete, setFilesToDelete] = useState([]);
   const [filesCurrentView, setFilesCurrentView] = useState([]);
@@ -44,7 +40,6 @@ export default function Task() {
     const { data } = await axios
       .request(config)
       .then((res) => {
-        setFilesInDatabase(res.data.files);
         setFilesCurrentView(res.data.files);
         return res;
       })
@@ -69,37 +64,40 @@ export default function Task() {
   //FILES
   //delte files axios request
   const deleteFiles = () => {
-    filesToDelete.forEach((file) => {
-      let config = {
-        method: "delete",
-        url: localStorage.getItem("api_path") + "delete/file/" + file.id,
-        maxBodyLength: Infinity,
-        headers: {
-          Authorization: "Bearer " + sessionStorage.getItem("user_jwt"),
-        },
-      }
-      axios
-        .request(config).then((res) => {
-          if (res.status === 200) {
-            settoastText("Changes saved successfully")
-            settoastVariant("success")
-            setShowToast(true)
-            setFilesToDelete([])
-            refetch()
-          } else {
+    return new Promise((resolve, reject) => {
+      filesToDelete.forEach((file) => {
+        let config = {
+          method: "delete",
+          url: localStorage.getItem("api_path") + "delete/file/" + file.id,
+          maxBodyLength: Infinity,
+          headers: {
+            Authorization: "Bearer " + sessionStorage.getItem("user_jwt"),
+          },
+        }
+        axios
+          .request(config).then((res) => {
+            if (res.status === 200) {
+              settoastText("Changes saved successfully")
+              settoastVariant("success")
+              setShowToast(true)
+              setFilesToDelete([])
+              refetch()
+            } else {
+              settoastText("Something went wrong")
+              settoastVariant("danger")
+              setShowToast(true)
+            }
+
+          }).catch((err) => {
             settoastText("Something went wrong")
             settoastVariant("danger")
             setShowToast(true)
-          }
+            console.log(err)
+          })
+      })
 
-        }).catch((err) => {
-          settoastText("Something went wrong")
-          settoastVariant("danger")
-          setShowToast(true)
-          console.log(err)
-        })
+      resolve()
     })
-
   }
 
   //send files axios request
@@ -143,36 +141,21 @@ export default function Task() {
   }
 
 
-  //deleting files
+  //deleting files from lists
   const deleteFile = async (file) => {
     setFilesCurrentView( //deleting file from current list of files
       filesCurrentView.filter((currentFile) => currentFile !== file)
     )
-
     //checking we are deleting files that are not currently send, or we are deleteing a file which is send
     if (filesToSend?.includes(file)) {
       setFilesToSend(filesToSend?.filter((currentFile) => currentFile !== file));
     } else {
       setFilesToDelete([...filesToDelete, file]);
     }
-
-
-    // //checking we are deleting files that are not currently send, or we are deleteing a file which is in database
-    // filesToSend?.map((currentFile) => {
-    //   if (currentFile === file) {
-    //     setFilesToSend(filesToSend?.filter((currentFile) => currentFile !== file)); //delete file from files to send
-
-    //   }
-
-    // })
-    // setFilesToDelete([...filesToDelete, file]); //add file to list to delete
-
   };
+
   const addFiles = (e) => {
-    // setFilesCurrentView([...filesCurrentView, file]);
     e.preventDefault();
-    console.log(e)
-    //setFilesToSend([...filesToSend, file]);
   }
 
   //adding files
@@ -189,14 +172,14 @@ export default function Task() {
       settoastText("No changes, nothing to save")
     }
     if (filesToDelete.length > 0) {
-      deleteFiles()
+      await deleteFiles()
     }
     if (filesToSend.length > 0) {
-      sendFiles()
+      await sendFiles()
     }
   }
-  //const [fileList, setFileList] = useState(null);
-  const files = filesToSend ? [...filesToSend] : [];
+  
+  
 
   //checking file amount
   useEffect(() => {
@@ -210,7 +193,7 @@ export default function Task() {
 
 
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>;
+    return <div>Loading.. </div>;
   }
   if (isError) {
     return <div>Errror, {error.message}</div>;
@@ -292,9 +275,4 @@ export default function Task() {
       </div>
     </>
   );
-}
-
-
-function getExtension(filename) {
-  return filename.split('.').pop()
 }

@@ -32,7 +32,6 @@ export default function MyCourses(props) {
   //leave course 
   const leaveCourse = async (course_id) => {
     await axios.delete(localStorage.getItem("api_path") + "course/remove/student/" + currentUser.id + "/from/course/" + course_id).then(res => {
-      console.log("res")
       settoastText("Leaved")
       settoastVariant("success")
       setShowToast(true)
@@ -46,7 +45,7 @@ export default function MyCourses(props) {
       })
   }
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>
+    return <div>Loading..</div>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

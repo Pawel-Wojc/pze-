@@ -1,7 +1,7 @@
 import React from 'react'
 import axios from 'axios';
 import { useQuery } from 'react-query';
-import { Card, CardHeader } from 'react-bootstrap';
+import { Card} from 'react-bootstrap';
 
 export default function TeacherCourseTaskPreview({ task_id }) {
 
@@ -28,7 +28,7 @@ export default function TeacherCourseTaskPreview({ task_id }) {
   const { isLoading, isError, error, data } = useQuery('teacher_task' + task_id, getData, { refetchOnWindowFocus: false })
 
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>
+    return <div>Loading...</div>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>
@@ -63,7 +63,7 @@ export default function TeacherCourseTaskPreview({ task_id }) {
         <Card.Body>
           <Card.Subtitle className="mb-2 text-muted">Available file extensions</Card.Subtitle>
           <Card.Text>
-          {((data.available_file_extensions == "")
+          {((data.available_file_extensions === "")
             ||(data.available_file_extensions==null)? <>All extensions</> : <>{data.available_file_extensions}</>)}
           </Card.Text>
         </Card.Body>

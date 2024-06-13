@@ -1,4 +1,4 @@
-import React  from 'react'
+import React from 'react'
 
 import { Link, useParams } from 'react-router-dom'
 
@@ -6,20 +6,22 @@ import axios from 'axios';
 import { useQuery } from 'react-query';
 export default function Course() {
   let { course_id } = useParams();
- 
+
   let config = {
-    method:'get',
+    method: 'get',
     url: localStorage.getItem("api_path") + "course/get/course/details/" + course_id,
     headers: {
- 
+
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
     }
   }
 
   const getData = async () => {
+
     const { data } = await axios.request(config)
       .then(res => {
         return res;
+
       })
       .catch(err => {
         // Handle errors
@@ -28,21 +30,21 @@ export default function Course() {
     return data
   }
 
-  const { isLoading, isError, error, data } = useQuery('course'+course_id, getData, { refetchOnWindowFocus: false,  })
+  const { isLoading, isError, error, data } = useQuery('course' + course_id, getData, { refetchOnWindowFocus: false, })
 
 
-  
+
 
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>
+    return <div>Loading.. </div>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>
   }
 
-  
+
   return (<>
-     <div class="row justify-content-md-center" style={{}}>
+    <div class="row justify-content-md-center" style={{}}>
       <h5> {data.title}</h5>
       {data.tasks.map(task => (
         <div class="card" style={{ width: '40rem', margin: '10px' }}>
@@ -55,13 +57,13 @@ export default function Course() {
                 <p>Available: {task.date_of_start}-{task.date_of_end}</p>
               </div>
               <div class="col">
-                <p>Status: {task.state ? "Done" : "To do"}</p>
+                <p>Status: {task.files.length > 0 ? "Done" : "To do"}</p>
               </div>
             </div>
           </div>
         </div>
       ))}
-    </div> 
+    </div>
   </>
   )
 }

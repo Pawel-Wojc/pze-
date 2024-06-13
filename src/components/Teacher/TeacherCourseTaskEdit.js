@@ -26,7 +26,7 @@ export default function TeacherCourseTaskEdit({ task_id }) {
       .max(10, 'Max number of files is 10'),
   })
   const formOptions = { resolver: yupResolver(validationSchema) };
-  const { register, handleSubmit, reset, formState } = useForm(formOptions);
+  const { register, handleSubmit, formState } = useForm(formOptions);
   const { errors } = formState;
 
   const getData = async () => {
@@ -50,7 +50,6 @@ export default function TeacherCourseTaskEdit({ task_id }) {
 
 
   const updateData = async (datatosend) => {
-    console.log(datatosend)
     let updateDataConfig = {
       method: 'post',
       url: localStorage.getItem("api_path") + "update/task",
@@ -62,7 +61,6 @@ export default function TeacherCourseTaskEdit({ task_id }) {
     }
     const { data } = await axios.request(updateDataConfig).then(res => {
       setShowToast(true)
-
       return res
     })
       .catch(err => {
@@ -76,12 +74,11 @@ export default function TeacherCourseTaskEdit({ task_id }) {
 
   function onSubmit(dataFromForm) {
     dataFromForm.id = data.id
-    console.log(dataFromForm)
-    const response = updateData(dataFromForm)
+    updateData(dataFromForm)
   }
 
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>
+    return <div>Loading.. </div>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

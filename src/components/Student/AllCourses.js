@@ -38,28 +38,51 @@ export default function AllCourses() {
       })
     return data;
   }
+
+  //get user courses 
+  const getUserCourses = () => {
+    return new Promise((resolve, reject) => {
+      axios.get(localStorage.getItem("api_path") + "course/get/user/courses")
+        .then(res => {
+          resolve(res.data);
+        })
+        .catch(err => {
+          console.error(err);
+          reject(err);
+        });
+    });
+  };
+
+
   //joing to course     TODO: check if user is already in course
   const joinToCourse = async (courseID) => {
-    const { files, ...currentUserWithoutFiles } = currentUser;
-
-
+    const userCourses = await getUserCourses();
+    const userCoursesIds = userCourses.map(course => course.id);
     let config = {
       url: localStorage.getItem("api_path") + "course/" + courseID + "/add/student",
       method: 'POST',
-      data: JSON.stringify(currentUserWithoutFiles),
+      data: JSON.stringify(currentUser),
       headers: {
         'Content-Type': 'application/json',
       }
     }
+
+
+    if (userCoursesIds.includes(courseID)) {
+      settoastText("Already in course")
+      settoastVariant("warning")
+      setShowToast(true)
+      return
+    }
+
+
     await axios.request(config)
       .then(res => {
         if (res.status === 200) {
-          console.log(res)
           settoastText("Joined")
           settoastVariant("success")
           setShowToast(true)
         } else {
-          console.log(res)
           settoastText("Something went wrong")
           settoastVariant("danger")
           setShowToast(true)
@@ -90,7 +113,7 @@ export default function AllCourses() {
 
   const { isLoading, isError, error, data } = useQuery('all_courses', getData, { refetchOnWindowFocus: false, })
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>
+    return <div>Loading... </div>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>
@@ -131,18 +154,14 @@ export default function AllCourses() {
                     </div>
                     <div className='col d-flex justify-content-end'>
                       <button type="button" class="btn btn-success " onClick={() => joinToCourse(course.id)}>Join</button>
-
                     </div>
                   </div>
                 </div>
               </ListGroup.Item>
             ))}
           </ListGroup>
-
-
         </div>
       </div>
     </>
   )
-
 }

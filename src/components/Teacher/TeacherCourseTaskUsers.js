@@ -20,7 +20,6 @@ export default function TeacherCourseTaskUsers({task_id}) {
         console.error(err);
         return err
       })
-    console.log(data)
     return data
 
   }

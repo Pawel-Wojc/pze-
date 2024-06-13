@@ -20,7 +20,6 @@ export default function TeacherCoursesList() {
   }
   const getData = async () => {
     const { data } = await axios.request(config).then(res => {
-      console.log(res)
       return res;
     })
       .catch(err => {
@@ -41,7 +40,7 @@ export default function TeacherCoursesList() {
   const handleClose = () => setModalShow(false);
   const addNewTask = async (e) => {
     e.preventDefault()
-    if (formValue == "") {
+    if (formValue === "") {
       return "Name can't be empty"
     }
     const course = {
@@ -142,7 +141,6 @@ export default function TeacherCoursesList() {
           settoastVariant("danger")
           setShowToast(true)
         }
-        console.log(res)
         return res;
       })
       .catch(err => {
@@ -151,7 +149,7 @@ export default function TeacherCoursesList() {
   }
 
   if (isLoading) {
-    return <div>Loading.. Tutaj mozna dac skeleton</div>
+    return <div>Loading.. </div>
 
   }
   if (isError) {
