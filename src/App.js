@@ -29,7 +29,7 @@ function App() {
 
 
   useEffect(() => {
-    if (sessionStorage.getItem("user_jwt")) { //if page was refresched
+    if (sessionStorage.getItem("user_jwt")) { //if page was refreshed
       axios.defaults.headers.common['Authorization'] = "Bearer " + sessionStorage.getItem("user_jwt");
       AuthService.getCurrentUser().then(
         (res) => {
