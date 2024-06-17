@@ -23,17 +23,17 @@ export default function TeacherCourseDetailsUserList() {
             })
         return data
     }
-    const { refetch, isLoading, isError, error, data } = useQuery("teacher_course", getCourseDetails, { cacheTime: 0, refetchOnWindowFocus: false })
+    const { refetch, isLoading, isError, error, data } = useQuery("teacher_course_users", getCourseDetails, { cacheTime: 0, refetchOnWindowFocus: false })
 
     return (
 
         <div>
-            {data?.tasks.map(task =>(
-                <></>
+             {data?.users.map(user =>(
+                <>{user.name}  {user.surname}</>
             )
 
 
-            )}
+            )} 
 
 
 

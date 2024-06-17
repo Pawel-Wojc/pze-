@@ -26,20 +26,22 @@ export default function Task() {
   const [filesCurrentView, setFilesCurrentView] = useState([]);
 
   let { task_id } = useParams();
-  let config = {
-    method: "get",
-    url: localStorage.getItem("api_path") + "get/task/" + task_id,
-    headers: {
-      Authorization: "Bearer " + sessionStorage.getItem("user_jwt"),
-    },
-  };
+
 
   const [sendDisable, setsendDisable] = useState(true);
 
   const getData = async () => {
+    let config = {
+      method: "get",
+      url: localStorage.getItem("api_path") + "get/task/" + task_id,
+      headers: {
+        Authorization: "Bearer " + sessionStorage.getItem("user_jwt"),
+      },
+    };
     const { data } = await axios
       .request(config)
       .then((res) => {
+        console.log(res)
         setFilesCurrentView(res.data.files);
         return res;
       })
@@ -178,8 +180,8 @@ export default function Task() {
       await sendFiles()
     }
   }
-  
-  
+
+
 
   //checking file amount
   useEffect(() => {

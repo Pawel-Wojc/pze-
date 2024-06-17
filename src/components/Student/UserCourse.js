@@ -9,7 +9,7 @@ export default function Course() {
 
   let config = {
     method: 'get',
-    url: localStorage.getItem("api_path") + "course/get/course/details/" + course_id,
+    url: localStorage.getItem("api_path") + "course/get/course/and/tasks/" + course_id,
     headers: {
 
       Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
@@ -20,6 +20,7 @@ export default function Course() {
 
     const { data } = await axios.request(config)
       .then(res => {
+        console.log(res)
         return res;
 
       })
@@ -46,7 +47,7 @@ export default function Course() {
   return (<>
     <div class="row justify-content-md-center" style={{}}>
       <h5> {data.title}</h5>
-      {data.tasks.map(task => (
+      {data?.tasks.map(task => (
         <div class="card" style={{ width: '40rem', margin: '10px' }}>
           <div class="card-body">
             <Link to={`/usertask/${task.id}`} class="card-title" state={{ from: "course", course_id: course_id, task_id: task.id }}>

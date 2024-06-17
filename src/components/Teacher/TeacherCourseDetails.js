@@ -30,7 +30,7 @@ export default function TeacherCourseDetails() {
         Authorization: "Bearer " + sessionStorage.getItem("user_jwt")
       }
     }
-    const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/course/details/" + course_id, config)
+    const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/course/and/tasks/" + course_id, config)
       .then(res => {
         console.log(res)
         return res
