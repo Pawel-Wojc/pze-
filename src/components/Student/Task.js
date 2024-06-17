@@ -203,7 +203,6 @@ export default function Task() {
 
   return (
     <>
-
       <ToastContainer position="top-end">
         <Toast
           onClose={() => setShowToast(false)}
@@ -216,65 +215,112 @@ export default function Task() {
         </Toast>
       </ToastContainer>
 
-      <div class="row justify-content-md-center">
-        <Card style={{ width: "40rem", margin: "10px" }}>
+      <div class="row justify-content-md-center" style={styles.container}>
+        <Card style={styles.card}>
           <CardBody>
             <CardTitle>{data.title}</CardTitle>
-            <CardText>{data.contents}</CardText>
-            <CardFooter>
-              Wymagane od: {data.date_of_start} do: {data.date_of_end}
-            </CardFooter>
-          </CardBody>
-        </Card>
-        <Card style={{ width: "40rem", margin: "10px" }}>
-          <CardBody>
-            <CardTitle>
-              Add File
-              <Form disabled={sendDisable}>
-                <p>
-                  <Form.Control type="file" onChange={handleFileChange} onSubmit={addFiles} multiple />
-                </p>
-              </Form>
-              <div>
-                <span style={{ color: (filesCurrentView?.length > data?.max_total_files_amount) ? "red" : "" }}>
-                  Files: {filesCurrentView?.length} of {data?.max_total_files_amount}{" "}
-                </span>
-              </div>
-              <OverlayTrigger
-                placement="right"
-                delay={{ show: 250, hide: 400 }}
-                overlay={<Tooltip id="button-tooltip-2">The name of your file will be used as a comment, there is no need to call it by your first name or the name of the task </Tooltip>}
-              >
-                <Button variant="success">?</Button>
-              </OverlayTrigger>
-            </CardTitle>
+
             <CardText>
+              <p>{data.contents}</p>
+              <span>
+                Otwarte od <h5 style={{display: "inline"}}>{data.date_of_start}</h5>  do:  <h5 style={{display: "inline"}}>{data.date_of_end}</h5>
+              </span>
+            </CardText>
+            <Form disabled={sendDisable}>
+              <p>
+                <Form.Control type="file" onChange={handleFileChange} onSubmit={addFiles} multiple />
+              </p>
+            </Form>
+            <div style={styles.fileList.container}>
+              <div style={styles.fileList.header}>
+                <h5 style={{color: (filesCurrentView?.length > data?.max_total_files_amount) ? "red" : ""}}>
+                  Files: {filesCurrentView?.length} of {data?.max_total_files_amount}
+                </h5>
+
+                <OverlayTrigger
+                  placement="right"
+                  delay={{ show: 250, hide: 400 }}
+                  overlay={<Tooltip id="button-tooltip-2">The name of your file will be used as a comment, there is no need to name it by your first name or the name of the task </Tooltip>}
+                >
+                  <Button variant="success" style={styles.infoButton}>?</Button>
+                </OverlayTrigger>
+              </div>
+              
+            
               {filesCurrentView?.map((file) => {
                 return (
-                  <li>
+                  <li style={styles.fileList.item}>
+                  <Button
+                    variant="outline-dark"
+                    onClick={() => deleteFile(file)}
+                    style={styles.fileList.item.button}
+                  >
+                    X
+                  </Button>
                     <span style={{ color: (file instanceof File) ? "green" : "black" }}>{file.name}</span>
-                    <Button
-                      variant="outline-dark"
-                      onClick={() => deleteFile(file)}
-                    >
-                      X
-                    </Button>
                   </li>
                 );
               })}
-            </CardText>
-            <CardFooter>
+            </div>
+
+
               <Button
                 disabled={sendDisable}
                 variant="success"
                 onClick={() => saveChanges()}
+                style={styles.card.saveButton}
               >
                 Save
               </Button>
-            </CardFooter>
           </CardBody>
         </Card>
       </div>
     </>
   );
+}
+
+const styles = {
+  container: {
+    padding: "5%"
+  },
+
+  card: {
+    width: "40%",
+    minHeight: "50vh",
+
+    saveButton: {
+      width: "15%",
+      height: "10%",
+    }
+  },
+
+  fileList: {
+    container: {
+      width: "100%",
+      minHeight: "10vh",
+      border: "1px solid grey",
+      borderRadius: "5px",
+      padding: "1%",
+      marginBottom: "2%"
+    },
+
+    item: {
+      width: "100%",
+      marginLeft: "5%",
+      marginTop: "1%",
+      marginBottom: "1%",
+
+      button: {
+        marginRight: "1%",
+        paddingTop: "1%",
+        paddingBottom: "1%"
+      }
+    },
+
+    header: {
+      display: "flex",
+      justifyContent: "space-between",
+      alignItems: "center",
+    }
+  }
 }

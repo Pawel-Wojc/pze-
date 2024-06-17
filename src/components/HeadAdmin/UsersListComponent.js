@@ -191,7 +191,7 @@ const Users = () => {
         return <div>Errror, {error.message}</div>
     }
     return (
-        <div className="container">
+        <div className="container" style={styles.container}>
             <ToastContainer position='top-end'>
                 <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
                     <Toast.Header>{toastText}</Toast.Header>
@@ -200,7 +200,7 @@ const Users = () => {
 
             <h2>Users list</h2>
 
-            <div className="row">
+            <div className="row" style={styles.labelHeader}>
                 <div className="col-sm">
                     <FloatingLabel controlId="name" label="Name" className="mb-3">
                         <Form.Control
@@ -236,16 +236,16 @@ const Users = () => {
             </div>
 
             <div className="row">
-                <div className="col-sm"> Name</div>
-                <div className="col-sm"> Surname</div>
-                <div className="col-sm"> Email</div>
-                <div className="col-sm"> Role</div>
+                <div className="col-sm"> <h4>Name</h4></div>
+                <div className="col-sm"> <h4>Surname</h4></div>
+                <div className="col-sm"> <h4>Email</h4></div>
+                <div className="col-sm"> <h4>Role</h4></div>
                 <div className="col-sm"> </div>
             </div>
             
                 {filteredUsers.map((user) => {
                     var domyslas = user.role
-                    return <div className="row border-success" >
+                    return <div className="row border-success" style={styles.entityRow} >
                         
                         <div className="col-sm"> {user.name}</div>
                         <div className="col-sm"> {user.surname}</div>
@@ -262,11 +262,11 @@ const Users = () => {
                             </Form.Select>
                         </div>
 
-                        <div className="col-sm">
+                        <div className="col-sm" style={styles.entityRow.buttonPair}>
                             {user.isAccountBlocked ?
-                                <Button variant="success" onClick={() => unblockUser(user.mail)}> Unblock</Button>
-                                : <Button variant="warning" onClick={() => blockUser(user.mail)}> Block</Button>}{' '}
-                            <Button variant="danger" onClick={() => deleteUser(user.id)} > Delete</Button>
+                                <Button variant="success" onClick={() => unblockUser(user.mail)} style={styles.entityRow.buttonPair.button}> Unblock</Button>
+                                : <Button variant="warning" onClick={() => blockUser(user.mail)} style={styles.entityRow.buttonPair.button}> Block</Button>}{' '}
+                            <Button variant="danger" onClick={() => deleteUser(user.id)} style={styles.entityRow.buttonPair.button}> Delete</Button>
 
                         </div>
 
@@ -282,6 +282,37 @@ const Users = () => {
 
         </div>
     )
+}
+
+const styles = {
+    container: {
+        marginTop: "1%"
+    },
+
+    labelHeader: {
+        padding: 0
+    },
+
+    entityRow: {
+        width: "100%",
+        marginBottom: "0.5%", 
+        alignItems: "center",
+        padding: "0.5%",
+
+        buttonPair: {
+            width: "100%",
+            display: "flex",
+            justifyContent: "space-around",
+
+            button: {
+                flex: 1,
+                marginRight: "1%",
+                marginLeft: "1%"
+            }
+        }
+    },
+
+    
 }
 
 export default Users

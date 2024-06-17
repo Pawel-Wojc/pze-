@@ -165,7 +165,6 @@ export default function TeacherCourseDetailsTasksList() {
 
   return (
     <>
-
       <ToastContainer position='top-end'>
         <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
           <Toast.Header>{toastText}</Toast.Header>
@@ -174,7 +173,7 @@ export default function TeacherCourseDetailsTasksList() {
 
       <Modal show={modalShow} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Name the title</Modal.Title>
+          <Modal.Title>New Task</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={addNewTask}>
@@ -182,6 +181,8 @@ export default function TeacherCourseDetailsTasksList() {
               onChange={(event) => setFormValue(event?.target.value)}
               value={formValue}
               type='text'
+              placeholder='Task name...'
+              style={styles.modal.form}
             />
             <Button variant="success" type="submit" >
               Add
@@ -190,27 +191,27 @@ export default function TeacherCourseDetailsTasksList() {
         </Modal.Body>
       </Modal>
 
-      <div className='container'>
-
-
-
-        <Button variant="success" onClick={() => setModalShow(true)}>New task</Button> {' '}
+      <div className='container' style={styles.container}>
+        <div style={styles.headerContainer}>
+          <h3>Tasks</h3>
+          <Button variant="success" onClick={() => setModalShow(true)} style={styles.headerContainer.button}>New task</Button>
+        </div>
 
         <div className="row justify-content-md-center">
           {(!data.tasks || data.tasks.length ===0 )?<>There are no tasks here yet</>:<></>}
           {data?.tasks.map((task) => {
             return <>
-              <Card style={{ width: '40rem', margin: '10px' }}>
+              <Card style={styles.card}>
                 <Card.Body>
                   <Card.Title>
                     <Link to={`/teacher/course/tasks/${task.id}`} class="card-title">
                       {task.title}
                     </Link>
                   </Card.Title>
-                  <Card.Text>
-                  </Card.Text>
-                  <Button variant="primary" onClick={() => downloadTask(task.id, task.title)} >Download</Button> {' '}
-                  <Button variant="danger" onClick={() => deleteTask(task.id)}>Delete</Button>
+                  <div style={styles.card.buttonPair}>
+                    <Button variant="primary" onClick={() => downloadTask(task.id, task.title)} style={styles.card.buttonPair.button}>Download</Button>
+                    <Button variant="danger" onClick={() => deleteTask(task.id)} style={styles.card.buttonPair.button}>Delete</Button>
+                  </div>
                 </Card.Body>
               </Card>
             </>
@@ -219,5 +220,47 @@ export default function TeacherCourseDetailsTasksList() {
       </div>
     </>
   )
+}
 
+const styles = {
+  container: {
+    padding: "1%",
+    width: "80%",
+    height: "100%"
+  },
+
+  modal: {
+    form: {
+      marginBottom: "2%"
+    }
+  },
+
+  headerContainer: {
+    width: "100%",
+    paddingLeft: "10%",
+    paddingRight: "10%",
+    display: "flex",
+    justifyContent: "space-between",
+
+    button: {
+      width: "20%",
+    }
+  },
+
+  card: { 
+    width: "80%", 
+    padding: 0,
+    margin: "1%", 
+
+    buttonPair: {
+      width: "100%",
+      display: "flex",
+      flexDirection: "row",
+      justifyContent: "end",
+
+      button: {
+        marginLeft: "1%"
+      }
+    }
+  }
 }

@@ -63,14 +63,14 @@ export default function Register() {
   return (
     <>
       <div class="position-absolute top-50 start-50 translate-middle">
-        {emailIsTaken ? <p class="text-danger">This Email is taken</p> : <></>}
-        {userCreated ? <p class="text-success">User created successfully</p> : <>
+        {emailIsTaken ? <p class="text-danger">This email is taken</p> : <></>}
+        {userCreated ? <p class="text-success">Account created successfully</p> : <>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Form.Group className="mb-3" controlId="name">
               <Form.Control
                 {...register('name')}
                 label="Name"
-                placeholder="Enter name"
+                placeholder="Name"
                 type="text"
                 name="name"
                 className={`form-control ${errors.name ? 'is-invalid' : ''}`}
@@ -82,7 +82,7 @@ export default function Register() {
               <Form.Control
                 {...register('surname')}
                 label="Surname"
-                placeholder="Enter surname"
+                placeholder="Surname"
                 type="text"
                 name="surname"
                 className={`form-control ${errors.surname ? 'is-invalid' : ''}`}
@@ -94,7 +94,7 @@ export default function Register() {
               <Form.Control
                 {...register('mail')}
                 label="Email"
-                placeholder="Enter email"
+                placeholder="Email"
                 type="text"
                 name="mail"
                 className={`form-control ${errors.mail ? 'is-invalid' : ''}`}
@@ -106,7 +106,7 @@ export default function Register() {
               <Form.Control
                 {...register('password')}
                 label="Password"
-                placeholder="Enter password"
+                placeholder="Password"
                 type="password"
                 name="password"
                 className={`form-control ${errors.password ? 'is-invalid' : ''}`}
@@ -126,7 +126,7 @@ export default function Register() {
               <div className="invalid-feedback">{errors.confirmPassword?.message}</div>
             </Form.Group>
 
-            <Button variant="primary" type="submit">
+            <Button variant="primary" type="submit" style={{marginRight: "1%"}}>
               Register
             </Button>
 
@@ -135,7 +135,7 @@ export default function Register() {
             </Button>
 
           </Form>
-          <div>Already register? <Link to="/login">Login</Link></div>
+          <div>Already have an account? <Link to="/login">Login</Link></div>
         </>}
       </div>
     </>

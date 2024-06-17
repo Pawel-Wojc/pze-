@@ -51,38 +51,105 @@ export default function MyCourses(props) {
     return <div>Errror, {error.message}</div>
   }
 
-  return (<>
+  return (
+    <>
     <ToastContainer position='top-end'>
       <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
         <Toast.Header>{toastText}</Toast.Header>
       </Toast>
     </ToastContainer>
-    <div class="row justify-content-md-center" style={{}}>
-      <h5>Your courses</h5>
-      {data.map(course => (
-        <div class="card" style={{ width: '40rem', margin: '10px' }}>
-          <div class="card-body">
-            <Link to={`/usercourse/${course.id}`} class="card-title" >
-              {course.title}
-            </Link>
-            <div class="row">
-              <div class="col">
+    <div className="container">
+    <h2 style={styles.title}>Your courses</h2>
+
+      <div class="row justify-content-md-center" style={styles.container}>
+        {data.map(course => (
+          <div class="card" style={styles.card}>
+
+              <Link to={`/usercourse/${course.id}`} class="card-title" style={{width: "100%"}}>
+                <h3 style={styles.card.title} >{course.title}</h3>
+              </Link>
+
+              <div style={styles.card.bottomRow}>
+                <div style={styles.card.bottomRow.teachers}>
+                  {course.course_owners.length === 0 ? (
+                    <></>
+                  ) : (
+                    <>
+                      <b>Teachers:</b>{' '}
+                      {course.course_owners.slice(0, 2).map((owner, i) => (
+                        <span key={i}>
+                          {owner.name} {owner.surname}
+                          {i < course.course_owners.length - 1 && i < 1 && ', '}
+                        </span>
+                      ))}
+                      {course.course_owners.length > 2 && '...'}
+                    </>
+                  )}
+                </div>
+
+                <Button
+                  style={styles.card.bottomRow.button}
+                  variant="warning"
+                  onClick={() => leaveCourse(course.id)}
+                >
+                  Leave
+                </Button>
+
               </div>
-              <div class="col">
-                <p>
-                  {course.course_owners.length === 0 ? <></> : <>
-                    <br></br>
-                    <b>Teachers:</b> {course.course_owners.map((owner, i) => (
-                      <h6>{owner.name} {owner.surname}  </h6>
-                    ))}
-                  </>}</p>
-                <Button variant="warning" onClick={() => leaveCourse(course.id)}> Leave</Button>
-              </div>
+
             </div>
-          </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   </>
   )
 }
+
+const styles = {
+  title: {
+    marginLeft: "10%",
+    marginTop: "2%"
+  },
+
+  container: {
+    display: "flex",
+    flexWrap: "wrap",
+    justifyContent: "space-between",
+  },
+
+  card: {
+    width: "40%",
+    height: "12rem",
+    margin: "1%",
+    padding: 0,
+
+    display: "flex",
+    justifyContent: "space-between",
+    alignItems: "center",
+    flexDirection: "column",
+
+    title: {
+      margin: 0,
+      padding: "2%"
+    },
+
+    bottomRow: {
+      display: "flex",
+      flexDirection: "row",
+      alignItems: "center",
+      width: "100%",
+      padding: "2%",
+
+      teachers: {
+        flex: 1,
+        justifyContent: "left"
+      },
+
+      button: {
+        justifyContent: "right",
+      }
+    }
+  }
+
+ 
+};

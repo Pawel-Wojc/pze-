@@ -192,10 +192,24 @@ export default function TeacherCourseTaskEdit({ task_id }) {
             </FloatingLabel>
 
           </Form.Group>
-          <Button variant="success" type="submit">Save</Button>
+          <div style={styles.saveButtonContainer}>
+            <Button variant="success" type="submit" style={styles.saveButtonContainer.saveButton}>Save</Button>
+          </div>
         </Form>
       </div>
     </div>
   )
 }
 
+const styles = {
+  saveButtonContainer: {
+    width: "100%",
+    display: "flex",
+    justifyContent: "end",
+
+
+    saveButton: {
+      width: "15%"
+    }
+  }
+}

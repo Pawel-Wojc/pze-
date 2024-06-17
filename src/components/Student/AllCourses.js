@@ -126,35 +126,50 @@ export default function AllCourses() {
         <Toast.Header>{toastText}</Toast.Header>
       </Toast>
     </ToastContainer>
-      <div className='container'>
+      <div className='container' style={styles.container}>
         <div className='row justify-content-center'>
-          <div className="col-sm">
-            <FloatingLabel controlId="name" label="Search" className="mb-3">
-              <Form.Control
-                name="name"
-                onChange={(event) => setFormSearch(event?.target.value)}
-                value={formSearch}
-                type='text'
-              />
-            </FloatingLabel>
-          </div>
-          <h5>List of all available courses</h5>
-          <ListGroup>
+          
+          <h2>List of all available courses</h2>
+
+          {/* <div className="col-sm"> */}
+          <Form style={styles.searchBar}>
+              <Form.Label
+                visuallyHidden
+              >
+                Search bar
+              </Form.Label>
+                <Form.Control
+                  size="lg"
+                  name="name"
+                  onChange={(event) => setFormSearch(event?.target.value)}
+                  value={formSearch}
+                  placeholder='Search...'
+                  type='text'
+                />
+            </Form>
+          {/* </div> */}
+
+          <ListGroup style={styles.listGroup}>
             {filteredItems.map((course, i) => (
               <ListGroup.Item key={i} className=''>
                 <div className='container'>
                   <div className='row'>
-                    <div className='col'>
-                      {course.title}
-                      {course.course_owners.length === 0 ? <></> : <>
-                        <br></br>
+                    <div style={styles.itemTexts} className='col'>
+                      <h5>
+                        {course.title}
+                        
+                      </h5>
+                      <span>
+                        {course.course_owners.length === 0 ? <></> :
+                        <h6>
                         <b>Teachers:</b> {course.course_owners.map((owner, i) => (
-                          <>{owner.name} {owner.surname} </>
-                        ))}
-                      </>}
+                            <>{owner.name} {owner.surname} </>
+                          ))}
+                        </h6>}
+                      </span>
                     </div>
-                    <div className='col d-flex justify-content-end'>
-                      <button type="button" class="btn btn-success " onClick={() => joinToCourse(course.id)}>Join</button>
+                    <div className='col d-flex justify-content-end' style={styles.buttonContainer}>
+                      <button style={styles.joinbutton} type="button" class="btn btn-success " onClick={() => joinToCourse(course.id)}>Join</button>
                     </div>
                   </div>
                 </div>
@@ -166,3 +181,31 @@ export default function AllCourses() {
     </>
   )
 }
+
+const styles = {
+  joinbutton: {
+    height: "40px",
+    width: "100px"
+  },
+
+  buttonContainer: {
+    alignItems: "center"
+  },
+
+  itemTexts: {
+    alignItems: "center",
+  },
+
+  listGroup: {
+    padding: 0,
+    margin: "1%"
+  },
+
+  searchBar: {
+    padding: 0,
+  },
+
+  container: {
+    marginTop: "1%"
+  }
+};

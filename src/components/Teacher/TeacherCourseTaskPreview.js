@@ -37,35 +37,28 @@ export default function TeacherCourseTaskPreview({ task_id }) {
     <div className='container'>
       <Card>
         <Card.Body>
+
           <Card.Subtitle className="mb-2 text-muted">Title</Card.Subtitle>
           <Card.Text>
             {data.title}
           </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body>
+
           <Card.Subtitle className="mb-2 text-muted">Description</Card.Subtitle>
           <Card.Text>
-          {data.contents}
+            {data.contents}
           </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body>
+
           <Card.Subtitle className="mb-2 text-muted">Start date - end date</Card.Subtitle>
           <Card.Text>
-          {data.date_of_start} - {data.date_of_end} 
+            {data.date_of_start} - {data.date_of_end} 
           </Card.Text>
-        </Card.Body>
-      </Card>
-      <Card>
-        <Card.Body>
+
           <Card.Subtitle className="mb-2 text-muted">Available file extensions</Card.Subtitle>
           <Card.Text>
-          {((data.available_file_extensions === "")
-            ||(data.available_file_extensions==null)? <>All extensions</> : <>{data.available_file_extensions}</>)}
+            {((data.available_file_extensions === "")
+              ||(data.available_file_extensions==null)? <>All extensions</> : <>{data.available_file_extensions}</>)}
           </Card.Text>
+
         </Card.Body>
       </Card>
 

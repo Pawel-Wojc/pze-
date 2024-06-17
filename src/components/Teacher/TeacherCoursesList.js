@@ -166,7 +166,7 @@ export default function TeacherCoursesList() {
 
       <Modal show={modalShow} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Name the title</Modal.Title>
+          <Modal.Title>New Course</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form onSubmit={addNewTask}>
@@ -174,6 +174,8 @@ export default function TeacherCoursesList() {
               onChange={(event) => setFormValue(event?.target.value)}
               value={formValue}
               type='text'
+              placeholder="Course name..."
+              style={styles.modal.form}
             />
             <Button variant="success" type="submit" >
               Add
@@ -184,23 +186,27 @@ export default function TeacherCoursesList() {
 
 
 
-      <div className="container" >
-        <h5>List of all your courses</h5>
-        <Button className="mt-1" variant="success" onClick={() => setModalShow(true)}>Add new</Button>
+      <div className="container" style={styles.container}>
+        <div style={styles.headerMenu}>
+          <h2 style={styles.headerMenu.title}>List of all your courses</h2>
+          <Button className="mt-1" variant="success" onClick={() => setModalShow(true)} style={styles.headerMenu.button}>Add new</Button>
+        </div>
 
         <div className="row justify-content-md-center">
           {data?.map((course) => {
             return (
 
-              <Card style={{ width: '40rem', margin: '5px' }}>
-                <Card.Body>
+              <Card style={styles.card}>
+                <Card.Body style={styles.card.body}>
                   <Card.Title>
                     <Link to={`/teacher/course/${course.id}`} class="card-title" >
                       {course.title}
                     </Link>
                   </Card.Title>
-                  <Button variant="danger" onClick={() => deleteTask(course.id)}> Delete</Button>
-                  <Button onClick={() => downloadCourse(course.id, course.title)}> Get Course Files</Button>
+                  <div style={styles.card.body.buttonPair}>
+                    <Button variant="danger" onClick={() => deleteTask(course.id)} style={styles.card.body.buttonPair.button}> Delete</Button>
+                    <Button onClick={() => downloadCourse(course.id, course.title)} style={styles.card.body.buttonPair.button}> Get Course Files</Button>
+                  </div>
                 </Card.Body>
               </Card>
 
@@ -212,4 +218,63 @@ export default function TeacherCoursesList() {
       </div>
     </>
   )
+}
+
+const styles = {
+  container: {
+      marginTop: "1%",
+  },
+
+  modal: {
+    form: {
+      marginBottom: "2%"
+    }
+  },
+
+  headerMenu: {
+    width: "80%",
+    marginLeft: "10%",
+    height: "3rem",
+    marginBottom: "1%",
+    display: "flex",
+    flexDirection: "row",
+
+    title: {
+      flex: 1,
+      justifyContent: "left"
+    },
+
+    button: {
+      width: "10%",
+      height: "90%",
+      justifyContent: "right"
+    }
+  },
+
+  card: {
+    width: "40%",
+    height: "10rem",
+    margin: "1%",
+    padding: 0,
+
+    body: {
+      display: "flex",
+      flexDirection: "column",
+      justifyContent: "space-between",
+
+      buttonPair: {
+        display: "flex",
+        flexDirection: "row",
+        justifyContent: "end",
+
+        button: {
+          width: "30%",
+          marginLeft: "1%",
+        }
+      }
+    }
+
+
+  }
+  
 }

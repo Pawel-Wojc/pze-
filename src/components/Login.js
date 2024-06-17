@@ -96,7 +96,7 @@ export default function Login() {
             <Form.Control
               {...register('mail')}
               label="Email"
-              placeholder="Enter email"
+              placeholder="Email"
               type="text"
               name="mail"
               className={`form-control ${errors.mail ? 'is-invalid' : ''}`}
@@ -108,7 +108,7 @@ export default function Login() {
             <Form.Control
               {...register('password')}
               label="Password"
-              placeholder="Enter password"
+              placeholder="Password"
               type="password"
               name="password"
               className={`form-control ${errors.password ? 'is-invalid' : ''}`}

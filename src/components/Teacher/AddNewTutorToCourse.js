@@ -89,7 +89,7 @@ export default function AddNewTutorToCourse() {
   }
 
   return (
-    <div>
+    <div style={styles.container}>
       <ToastContainer position="top-end">
         <Toast
           onClose={() => setShowToast(false)}
@@ -103,15 +103,28 @@ export default function AddNewTutorToCourse() {
       </ToastContainer>
       <Modal show={modalShow} onHide={handleClose}>
         <Modal.Header closeButton>
-          <Modal.Title>Select turor</Modal.Title>
+          <Modal.Title>Select tutor</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           
         </Modal.Body>
       </Modal>
-      <Button variant="success" onClick={() => setModalShow(true)}>
+      <Button variant="success" onClick={() => setModalShow(true)} style={styles.button}>
         New tutor
-      </Button>{" "}
+      </Button>
     </div>
   );
+}
+
+const styles = {
+  container: {
+    height: "100%",
+    alignItems: "center",
+  },
+
+  button: {
+    width: "100%",
+    height: "100%"
+  }
+
 }

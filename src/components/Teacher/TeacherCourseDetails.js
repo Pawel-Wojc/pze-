@@ -85,35 +85,116 @@ export default function TeacherCourseDetails() {
   }
 
   return (
-    <div className='container'>
-        <AddNewTutorToCourse></AddNewTutorToCourse>
-        <ToastContainer position='top-end'>
+    <div className='container' style={styles.container}>
+      <ToastContainer position='top-end'>
         <Toast onClose={() => setShowToast(false)} show={showToast} delay={3000} bg={toastVariant} autohide>
           <Toast.Header>{toastText}</Toast.Header>
         </Toast>
       </ToastContainer>
 
-      {!isEditingTitle ? <h3> {data.title}
-        <Button variant='light' onClick={() => { setIsEditingTitle(!isEditingTitle); setCourseTitlle(data.title) }}><img alt= "Edit" src={editLogo}></img></Button> </h3>
-        : <>
-          <FloatingLabel controlId="coursename" label="Name" className="mb-3">
-            <Form.Control
-              name="name"
-              onChange={(event) => setCourseTitlle(event?.target.value)}
-              value={courseTitle}
-              type='text'
-            />
-          </FloatingLabel>
-          <Button variant='light' onClick={() => { setIsEditingTitle(!isEditingTitle); saveCourseTitle() }}>Save</Button>
-        </>}
+      {!isEditingTitle ?
+        <div style={styles.titleRow}>
+          <h2 style={styles.titleRow.title}>{data.title}</h2>
+          <Button variant='light' onClick={() => { setIsEditingTitle(!isEditingTitle); setCourseTitlle(data.title) }}>
+              <img alt= "Edit" src={editLogo}></img>
+          </Button>
+          <div style={styles.titleRow.newTutorButton}>
+            <AddNewTutorToCourse></AddNewTutorToCourse>
+          </div>
+        </div>
+      : 
+      <div style={styles.titleEditRow}>
+          <Form style={styles.form}>
+            <FloatingLabel controlId="coursename" label="Name" style={{margin: 0}}>
+              <Form.Control
+                name="name"
+                onChange={(event) => setCourseTitlle(event?.target.value)}
+                value={courseTitle}
+                type="text"
+              />
+              </FloatingLabel>
+          </Form>
+          <Button
+            variant="light"
+            onClick={() => { setIsEditingTitle(!isEditingTitle); saveCourseTitle(); }}
+            style={styles.button}
+          >
+            Save
+          </Button>
+    </div>}
       
-      <Button onClick={() => setView("tasks")}>Tasks</Button> {' '}
-      <Button onClick={() => setView("users")} >Users</Button>{' '}
-      <br></br>
-      <br></br>
+      <div style={styles.navigationMenu}>
+        <Button onClick={() => setView("tasks")} style={styles.navigationMenu.button}>Tasks</Button>
+        <Button onClick={() => setView("users")} style={styles.navigationMenu.button}>Users</Button>
+      </div>
       {view === "users" && <TeacherCourseDetailsUserList></TeacherCourseDetailsUserList>}
       {view === "tasks" && <TeacherCourseDetailsTasksList></TeacherCourseDetailsTasksList>}
     </div>
   )
+}
 
+const styles = {
+  container: {
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center"
+  },
+
+  titleRow: {
+    width: "80%",
+    height: "3rem",
+    marginTop: "1%",
+    marginBottom: "1%",
+    display: "flex",
+    flexDirection: "row",
+    alignItems: "center",
+
+    title: {
+      marginRight: "1%"
+    },
+
+    newTutorButton: {
+      height: "90%",
+      width: "15%",
+      marginLeft: "auto",
+      marginRight: "5%"
+    }
+  },
+
+  titleEditRow: {
+    width: "70%",
+    display: "flex",
+    justifyContent: "start",
+    alignItems: "center",
+    height: "4rem",
+    marginBottom: "0.5%"
+  },
+
+  form: {
+    flex: 10,
+    marginRight: "1%",
+  },
+
+  button: {
+    flex: 1.5,
+    height: "100%",
+  },
+
+  navigationMenu: {
+    width: "80%",
+    marginBottom: "1%",
+    borderTop: "solid",
+    paddingLeft: "2%",
+    borderBottomColor: 'black',
+    borderTopWidth: 2,
+
+    button: {
+      marginLeft: "1%",
+      width: "10%",
+      borderTopLeftRadius: 0,
+      borderTopRightRadius: 0,
+      borderBottomLeftRadius: "10px",
+      borderBottomRightRadius: "10px"
+    }
+  }
 }
