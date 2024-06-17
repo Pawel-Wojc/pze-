@@ -26,6 +26,7 @@ export default function AllCourses() {
   const getData = async () => {
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/all/courses")
       .then(res => {
+        console.log(res)
         setAllItems(res.data)
         if (filteredItems.length == 0) {
           setFilteredItems(res.data)

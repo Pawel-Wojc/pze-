@@ -32,6 +32,7 @@ export default function TeacherCourseDetails() {
     }
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/course/details/" + course_id, config)
       .then(res => {
+        console.log(res)
         return res
         
       })
