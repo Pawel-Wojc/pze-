@@ -2,7 +2,7 @@ import { React } from 'react'
 import { useQuery } from 'react-query';
 import axios from 'axios';
 import { useParams } from 'react-router-dom';
-
+import Accordion from 'react-bootstrap/Accordion';
 
 export default function TeacherCourseDetailsUserList() {
     let { course_id } = useParams();
@@ -27,16 +27,39 @@ export default function TeacherCourseDetailsUserList() {
 
     return (
 
-        <div>
-             {data?.users.map(user =>(
-                <>{user.name}  {user.surname}</>
+        <div  style={styles.container}>
+            <div className='row justify-content-md-center' >
+            {data?.users.map(user => (
+                <Accordion style={styles.accordion}>
+                    <Accordion.Item eventKey="0">
+                        <Accordion.Header>{user.name} {user.surname}</Accordion.Header>
+                        <Accordion.Body>
+                            {user.tasks.map(task => (
+                                <>{console.log(task)}
+                                    <div className='row'>
+                                    {console.log(task.userFiles.length)}
+                                        <div className='col' >{task.title}</div>
+                                        <div className='col' >Files: {task.userFiles.length}</div>
+                                    </div>
+                                </>
+                            ))}
+                        </Accordion.Body>
+                    </Accordion.Item>
+                </Accordion>
             )
-
-
-            )} 
-
-
-
+            )}
+            </div>
         </div>
     )
+}
+
+const styles = {
+    container: {
+        padding: "1%",
+        width: "80%",
+        height: "100%"
+      },
+    accordion: {
+        width:"80%"
+    }
 }
