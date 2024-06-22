@@ -6,7 +6,7 @@ import { useState } from 'react';
 import { Button } from 'react-bootstrap';
 import TeacherCourseTasksEdit from './TeacherCourseTaskEdit';
 import TeacherCourseTasksPreview from './TeacherCourseTaskPreview'
-import TeacherCourseTasksUsers from './TeacherCourseTaskUsers'
+
 
 export default function TeacherCourseTask() {
   const [view, setView] = useState("preview");
@@ -24,7 +24,7 @@ export default function TeacherCourseTask() {
         {/* <Button onClick={() => setView("users")}>Users</Button>{' '} */}
         {view === "edit" && <TeacherCourseTasksEdit task_id={task_id}></TeacherCourseTasksEdit>}
         {view === "preview" && <TeacherCourseTasksPreview task_id={task_id}></TeacherCourseTasksPreview>}
-        {view === "users" && <TeacherCourseTasksUsers task_id={task_id}></TeacherCourseTasksUsers>}
+
       </div>
     </div>
   )
