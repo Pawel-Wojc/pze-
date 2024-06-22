@@ -7,6 +7,7 @@ import Card from 'react-bootstrap/Card';
 import { Modal } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Toast, ToastContainer } from 'react-bootstrap';
+import Loading from "../Utils/Loading";
 
 export default function TeacherCoursesList() {
 
@@ -149,7 +150,7 @@ export default function TeacherCoursesList() {
   }
 
   if (isLoading) {
-    return <div>Loading.. </div>
+    return <Loading></Loading>
 
   }
   if (isError) {

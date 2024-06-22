@@ -11,6 +11,7 @@ import TeacherCourseDetailsTasksList from './TeacherCourseDetailsTasksList'
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import editLogo from "./../../Icons/Pencil.svg"
 import AddNewTutorToCourse from './AddNewTutorToCourse';
+import Loading from '../Utils/Loading';
 
 export default function TeacherCourseDetails() {
 
@@ -32,9 +33,7 @@ export default function TeacherCourseDetails() {
     }
     const { data } = await axios.get(localStorage.getItem("api_path") + "course/get/course/and/tasks/" + course_id, config)
       .then(res => {
-        console.log(res)
-        return res
-        
+        return res     
       })
       .catch(err => {
         console.error(err)
@@ -78,7 +77,7 @@ export default function TeacherCourseDetails() {
   }
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading></Loading> 
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

@@ -1,5 +1,5 @@
 import React from 'react'
-
+import Loading from '../Utils/Loading';
 import { Link, useParams } from 'react-router-dom'
 
 import axios from 'axios';
@@ -37,7 +37,7 @@ export default function Course() {
 
 
   if (isLoading) {
-    return <div>Loading.. </div>
+    return <Loading></Loading>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

@@ -8,6 +8,7 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
 import Button from 'react-bootstrap/Button';
 import { Toast, ToastContainer } from 'react-bootstrap';
+import Loading from '../Utils/Loading';
 
 
 export default function TeacherCourseTaskEdit({ task_id }) {
@@ -78,7 +79,7 @@ export default function TeacherCourseTaskEdit({ task_id }) {
   }
 
   if (isLoading) {
-    return <div>Loading.. </div>
+    return <Loading></Loading>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

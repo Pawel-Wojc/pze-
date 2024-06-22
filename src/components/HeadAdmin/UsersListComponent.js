@@ -5,6 +5,7 @@ import axios from "axios";
 import { Toast, ToastContainer } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
+import Loading from '../Utils/Loading';
 
 const Users = () => {
     const [showToast, setShowToast] = useState(false);
@@ -185,7 +186,7 @@ const Users = () => {
     }
 
     if (isLoading) {
-        return <div>Loading..</div>
+        return <Loading></Loading>
     }
     if (isError) {
         return <div>Errror, {error.message}</div>

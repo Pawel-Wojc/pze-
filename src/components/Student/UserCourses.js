@@ -5,6 +5,7 @@ import axios from 'axios'
 import { Button } from 'react-bootstrap';
 import { Toast, ToastContainer } from 'react-bootstrap';
 import { CurrentUserContext } from './../Utils/CurrentUserContext';
+import Loading from '../Utils/Loading';
 
 export default function MyCourses(props) {
 
@@ -45,7 +46,7 @@ export default function MyCourses(props) {
       })
   }
   if (isLoading) {
-    return <div>Loading..</div>
+    return <Loading></Loading>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

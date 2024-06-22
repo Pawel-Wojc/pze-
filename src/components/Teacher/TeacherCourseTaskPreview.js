@@ -2,6 +2,7 @@ import React from 'react'
 import axios from 'axios';
 import { useQuery } from 'react-query';
 import { Card} from 'react-bootstrap';
+import Loading from '../Utils/Loading';
 
 export default function TeacherCourseTaskPreview({ task_id }) {
 
@@ -28,7 +29,7 @@ export default function TeacherCourseTaskPreview({ task_id }) {
   const { isLoading, isError, error, data } = useQuery('teacher_task' + task_id, getData, { refetchOnWindowFocus: false })
 
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading></Loading>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

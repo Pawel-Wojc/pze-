@@ -7,6 +7,7 @@ import { Toast, ToastContainer } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import FloatingLabel from 'react-bootstrap/FloatingLabel';
 import { CurrentUserContext } from './../Utils/CurrentUserContext';
+import Loading from '../Utils/Loading';
 
 export default function AllCourses() {
 
@@ -114,7 +115,7 @@ export default function AllCourses() {
 
   const { isLoading, isError, error, data } = useQuery('all_courses', getData, { refetchOnWindowFocus: false, })
   if (isLoading) {
-    return <div>Loading... </div>
+    return <Loading></Loading>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

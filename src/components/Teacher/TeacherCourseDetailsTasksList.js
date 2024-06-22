@@ -8,6 +8,7 @@ import { Link } from 'react-router-dom';
 import { Modal } from 'react-bootstrap';
 import Form from 'react-bootstrap/Form';
 import { Toast, ToastContainer } from 'react-bootstrap';
+import Loading from '../Utils/Loading';
 
 
 export default function TeacherCourseDetailsTasksList() {
@@ -157,7 +158,7 @@ export default function TeacherCourseDetailsTasksList() {
 
   //view
   if (isLoading) {
-    return <div>Loading...</div>
+    return <Loading></Loading>
   }
   if (isError) {
     return <div>Errror, {error.message}</div>

@@ -9,6 +9,7 @@ import { Toast, ToastContainer } from "react-bootstrap";
 import OverlayTrigger from 'react-bootstrap/OverlayTrigger';
 import Tooltip from 'react-bootstrap/Tooltip';
 import { CurrentUserContext } from './../Utils/CurrentUserContext';
+import Loading from "../Utils/Loading";
 
 export default function Task() {
   const {
@@ -195,7 +196,7 @@ export default function Task() {
 
 
   if (isLoading) {
-    return <div>Loading.. </div>;
+    return <Loading></Loading>;
   }
   if (isError) {
     return <div>Errror, {error.message}</div>;
