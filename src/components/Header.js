@@ -43,7 +43,7 @@ export default function Header(props) {
 
                             {(currentUser.role === "admin") ?
                                 <>
-                                    <Nav.Link as={Link} to="/teacher/courseslist">Courses</Nav.Link>
+                                    
                                 </> : <></>}
 
                             <Button variant="primary" onClick={handleShow}>
