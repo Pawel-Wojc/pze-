@@ -1,22 +1,22 @@
-Login
-![Login page](./Pictures/1.png?raw=true "Login page")
-Register
-![Register page](./Pictures/2.png "Register page")
-Student view of all courses
+##Login
+![](./Pictures/1.png?)
+##Register
+![](./Pictures/2.png)
+##Student view of all courses
 ![](./Pictures/3.png)
-Searching in courses
+##Searching in courses
 ![](./Pictures/4.png)
-Student's courses
+##Student's courses
 ![](./Pictures/5.png)
-Tasks in course
+##Tasks in course
 ![](./Pictures/6.png)
-Task and files view
+##Task and files view
 ![](./Pictures/7.png)
-Teachers courses
+##Teachers courses
 ![](./Pictures/8.png)
-Teacher's course view
+##Teacher's course view
 ![](./Pictures/9.png)
-Teacher's taks edit
+##Teacher's taks edit
 ![](./Pictures/10.png)
-Admin user managment
+##Admin user managment
 ![](./Pictures/11.png)
